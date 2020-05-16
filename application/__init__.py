@@ -3,13 +3,25 @@ app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
 
-# configure database URI
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///services.db"
+# Env config - see SQLAlchemy docs
+ENV = 'dev'
+
+if ENV == 'dev':
+  app.debug = True
+  app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:123456@localhost/devServices"
+else:
+  app.debug = False
+  app.config["SQLALCHEMY_DATABASE_URI"] = ""
+
+# # configure database URI
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///services.db"
 
 # log all queries
 app.config["SQLALCHEMY_ECHO"] = True
 
-# db object for interacting with the db
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# db object for interacting with the db - can use it to query db
 db = SQLAlchemy(app)
 
 from application import views

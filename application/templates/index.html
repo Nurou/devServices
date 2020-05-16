@@ -1,5 +1,53 @@
 {% extends "layout.html" %} {% block body %}
-<p>
-  Hello world!
-</p>
+<div class="container">
+  <img src="../static/logo.png" alt="devServices logo" class="logo" />
+  {% if message %}
+  <p class="message">{{ message | safe }}</p>
+  {% endif %}
+  <form action="/submit" method="POST">
+    <div class="form-group">
+      <h1>Your Details</h1>
+      <input type="text" name="client-name" placeholder="Name" />
+      <br />
+      <input
+        type="text"
+        name="client-phone-number"
+        placeholder="Phone Number"
+      />
+    </div>
+    <br />
+    <div class="form-group">
+      <h3>Service</h3>
+      <select name="service">
+        <option value="">Select Service</option>
+        <!-- TODO: list all the services here -->
+        <option value="Web Services">Web Services</option>
+        <option value="Mobile Services">Mobile Services (iOS/Android)</option>
+        <option value="Digital Consultancy">Digital Consultancy</option>
+        <option value="Design">Design</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <h3>Developers</h3>
+      <select name="developers">
+        <option value="">Select Developers</option>
+        <!-- TODO: list all  developers for selected service -->
+        <option value="John Doe">John Doe</option>
+        <option value="Jane Doe">Jane Doe</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <h3>Requirements</h3>
+      <textarea
+        name="comments"
+        id=""
+        cols="30"
+        rows="10"
+        placeholder="Please describe what you would like for us to achieve"
+      ></textarea>
+    </div>
+    <input type="submit" value="Submit" class="btn" />
+  </form>
+</div>
 {% endblock %}

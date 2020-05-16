@@ -4,9 +4,28 @@
     <meta charset="utf-8" />
     <title>devServices - Software Service Agency</title>
     <link rel="stylesheet" href="../static/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
+    <header>
+      <a href="/" class="logo__link">
+        <img
+          src="../static/images/logo.svg"
+          class="logo"
+          alt="devServices logo"
+        />
+      </a>
+      <nav class="nav__links">
+        <ul>
+          <li><a href="#">Register</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
+      </nav>
+    </header>
     {% block body %} {% endblock %}
   </body>
 </html>

@@ -1,5 +1,5 @@
 from flask import render_template, request
-from flask_sqlalchemy import SQLAlchemy
+# app needs to be imported as it's used by decorators below
 from application import app
 
 @app.route("/")

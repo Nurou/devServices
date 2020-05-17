@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 # Env config - see SQLAlchemy docs
-ENV = 'dev'
+ENV = 'prod'
 
 if ENV == 'dev':
     app.debug = True

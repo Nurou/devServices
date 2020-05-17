@@ -1,23 +1,18 @@
-{% extends "layout.html" %} {% block body %}
+{% extends "layout.html" %} {% block content %}
 <div class="container">
   {% if message %}
   <p class="message">{{ message | safe }}</p>
   {% endif %}
   <form action="/submit" method="POST">
     <div class="form-group">
-      <h1>Your Details</h1>
-      <input type="text" name="client-name" placeholder="Name" />
-      <br />
-      <input
-        type="text"
-        name="client-phone-number"
-        placeholder="Phone Number"
-      />
+      <h1>New Order</h1>
     </div>
-    <br />
     <div class="form-group">
       <h3>Service</h3>
       <select name="service">
+        {% for service in services %}
+        <option value="">{{service}}</option>
+        {% endfor %}
         <option value="">Select Service</option>
         <!-- TODO: list all the services here -->
         <option value="Web Services">Web Services</option>
@@ -31,8 +26,9 @@
       <select name="developers">
         <option value="">Select Developers</option>
         <!-- TODO: list all  developers for selected service -->
-        <option value="John Doe">John Doe</option>
-        <option value="Jane Doe">Jane Doe</option>
+        {% for developer in developers %}
+        <option value="">{{developer}} </option>
+        {% endfor %}
       </select>
     </div>
 
@@ -49,4 +45,4 @@
     <input type="submit" value="Submit" class="btn" />
   </form>
 </div>
-{% endblock body %}
+{% endblock content %}

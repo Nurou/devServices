@@ -66,8 +66,8 @@ textarea {
 }
 
 .nav__links li,
-a,
-button {
+.nav__links a,
+.nav__links button {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   font-size: 17px;

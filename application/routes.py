@@ -1,7 +1,7 @@
 from flask import render_template, request, flash, redirect, url_for
 
 # app needs to be imported as it's used by decorators below
-from application import app
+from application import app, db, bcrypt
 from application.forms import RegistrationForm, LoginForm
 from application.models import Account, Role, Order
 
@@ -14,8 +14,8 @@ services = [
 ]
 
 developers = [
-    {"name": "John Doe", "skills": ["html, css, JavaScript"],},
-    {"name": "Jane Doe", "skills": ["Docker, Node, CI"],},
+    {"name": "John Doe", "skills": ["HTML, CSS, JavaScript"],},
+    {"name": "Jane Doe", "skills": ["Docker, Kubernetes"],},
 ]
 
 
@@ -28,7 +28,16 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f"Account created for {form.username.data}!", "success")
+        # hash pw to prepare it for db
+        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
+        account = Account(
+            username=form.username.data, email=form.email.data, password=hashed_pw
+        )
+        db.session.add(account)
+        db.session.commit()
+        flash(
+            f"Account created for {form.username.data}! You can now log in", "success"
+        )
         return redirect(url_for("home"))
     return render_template("register.html", title="Register", form=form)
 
@@ -37,22 +46,10 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+
         if form.email.data == "admin@agency.com" and form.password.data == "password":
             flash("You have been logged in!", "success")
             return redirect(url_for("home"))
         else:
             flash("Login Unsuccessful. Please check username and password", "danger")
     return render_template("login.html", title="Login", form=form)
-
-
-@app.route("/submit", methods=["POST"])
-def submit():
-    if request.method == "POST":
-        client_name = request.form["client-name"]
-        client_phone_number = request.form["client-phone-number"]
-        """ TODO: rest of form data """
-        print(client_name)
-        print(client_phone_number)
-        if client_name == "" or client_phone_number == "":
-            return render_template("index.html", message="Please enter required fields")
-    return render_template("success.html")

@@ -3,6 +3,7 @@ from flask import render_template, request, flash, redirect, url_for
 # app needs to be imported as it's used by decorators below
 from application import app
 from application.forms import RegistrationForm, LoginForm
+from application.models import Account, Role, Order
 
 
 services = [

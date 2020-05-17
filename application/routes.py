@@ -10,6 +10,10 @@ def index():
 def register():
     return render_template("register.html")
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
 @app.route("/submit", methods=['POST'])
 def submit():
     if request.method == 'POST':

@@ -6,6 +6,12 @@ This is an application that enables clients to order software services from an a
 
 The services offered vary in their type, as do the skill and cost of the developers.
 
+https://dev-services.herokuapp.com/
+
 ## Documentation
 
-[Database diagram](https://github.com/nurou/devServices/blob/master/documentation/images/db-diagram.png)
+[Database Diagram](https://github.com/nurou/devServices/blob/master/documentation/images/db-diagram.png)
+[User Stories](https://github.com/nurou/devServices/blob/master/documentation/user-stories.md)
+[SQL Create-Table Statements](https://github.com/nurou/devServices/blob/master/documentation/sql-create-table-statements.md)
+
+## Issues & Areas of Potential Improvement

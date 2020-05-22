@@ -40,8 +40,13 @@
       </a>
       <nav class="nav__links">
         <ul>
+          {% if current_user.is_authenticated %}
+          <li><a href={{ url_for('account') }}>Account</a></li>
+          <li><a href={{ url_for('logout') }}>Logout</a></li>
+          {% else %}
           <li><a href={{ url_for('register') }}>Register</a></li>
           <li><a href={{ url_for('login') }}>Login</a></li>
+          {% endif %}
         </ul>
       </nav>
     </header>

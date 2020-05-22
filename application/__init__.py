@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 app = Flask(__name__)
 
 # Env config - see SQLAlchemy docs
-ENV = "prod"
+ENV = "dev"
 
 if ENV == "dev":
     app.debug = True
@@ -26,8 +27,12 @@ app.config["SECRET_KEY"] = "6391c84926554768c34560ab1ff4d839"
 # db object for interacting with the db - can use it to query db
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+# handles the session machinery to help you login and logout users
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
+login_manager.login_message_category = "info"
+login_manager.login_message = "Please login to use this functionality."
 
 from application import routes
 
-# creates all the db relations
 db.create_all()

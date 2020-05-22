@@ -1,7 +1,15 @@
-from application import db
+from application import db, login_manager
+from flask_login import UserMixin
+
+# telling flask login that we're representing an account here
+@login_manager.user_loader
+def load_user(account_id):
+    return Account.query.get(int(account_id))
 
 
-class Account(db.Model):
+# user mixin adds the properties that belong to it to our model class
+# includes is_active, is_authenticated ...
+class Account(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -19,7 +27,7 @@ class Account(db.Model):
     role = db.relationship("Role", backref="account", lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.password}')"
+        return f"Account('{self.username}', '{self.email}', '{self.password}')"
 
 
 class Role(db.Model):

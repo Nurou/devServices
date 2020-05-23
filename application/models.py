@@ -49,6 +49,7 @@ class Order(db.Model):
         default=db.func.current_timestamp(),
         onupdate=db.func.current_timestamp(),
     )
+    account_id = db.Column(db.Integer, db.ForeignKey("account.id")
 
     def __repr__(self):
         return f"User('{self.date_created}', '{self.date_modified}')"

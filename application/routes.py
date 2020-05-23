@@ -13,19 +13,6 @@ from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, Or
 from application.models import Account, Role, Order
 
 
-services = [
-    "Mobile",
-    "Web",
-    "Design",
-    "DevOps",
-]
-
-developers = [
-    {"name": "John Doe", "skills": ["HTML, CSS, JavaScript"],},
-    {"name": "Jane Doe", "skills": ["Docker, Kubernetes"],},
-]
-
-
 @app.route("/")
 def home():
     return render_template("index.html", services=services, developers=developers)
@@ -44,6 +31,7 @@ def register():
             email=form.email.data,
             username=form.username.data,
             password=hashed_pw,
+            role="client",
         )
         db.session.add(account)
         db.session.commit()
@@ -107,6 +95,15 @@ def orders():
 def new_order():
     form = OrderForm()
     if form.validate_on_submit():
+        order = Order(
+            title=form.title.data,
+            requirements=form.requirements.data,
+            account=current_user,
+        )
+        db.session.add(order)
+        db.session.commit()
         flash("Your order has been created!", "success")
         return redirect(url_for("home"))
-    return render_template("create_order.html", title="New Orders", form=form)
+    return render_template(
+        "create_order.html", title="New Orders", form=form, legend="New Order"
+    )

@@ -9,7 +9,7 @@ from flask_login import (
 
 # app needs to be imported as it's used by decorators below
 from application import app, db, bcrypt
-from application.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, OrderForm
 from application.models import Account, Role, Order
 
 
@@ -94,3 +94,19 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template("account.html", title="Account", form=form)
+
+
+@app.route("/orders")
+@login_required
+def orders():
+    return render_template("orders.html", title="Orders")
+
+
+@app.route("/orders/new", methods=["GET", "POST"])
+@login_required
+def new_order():
+    form = OrderForm()
+    if form.validate_on_submit():
+        flash("Your order has been created!", "success")
+        return redirect(url_for("home"))
+    return render_template("create_order.html", title="New Orders", form=form)

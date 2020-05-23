@@ -40,7 +40,10 @@ def register():
         # hash pw to prepare it for db
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
         account = Account(
-            username=form.username.data, email=form.email.data, password=hashed_pw
+            name=form.name.data,
+            email=form.email.data,
+            username=form.username.data,
+            password=hashed_pw,
         )
         db.session.add(account)
         db.session.commit()

@@ -1,3 +1,12 @@
 {% extends "layout.html" %} {% block content %}
-<h1>Welcome {{ current_user.name }}</h1>
+<div class="mx-auto w-25">
+  <h1 class="mt-5 text-center">Welcome {{ current_user.name }}!</h1>
+  <br />
+  <div class="d-flex flex-column p-2 mx-auto width: 300px">
+    <a href="#" class="btn btn-primary">View Orders</a>
+    <a href="#" class="btn btn-primary">Make Order</a>
+  </div>
+</div>
+<!-- TODO: list orders here -->
+
 {% endblock content %}

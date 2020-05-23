@@ -50,7 +50,8 @@ textarea {
 
 .btn {
   display: block;
-  width: 100%;
+  /* width: 100%; */
+  width: 50%;
   background: #333;
   color: #fff;
   padding: 10px 20px;

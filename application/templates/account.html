@@ -36,13 +36,24 @@
           {{ form.submit(class="btn btn-outline-info") }}
         </div>
       </form>
+      <form
+        method="POST"
+        action=""
+        enctype="multipart/form-data"
+        onSubmit="return confirm('Are you sure you wish to delete?');"
+      >
+        {{ delete_form.hidden_tag() }}
+        <div class="form-group red">
+          {{ delete_form.delete(class="btn bg-danger") }}
+        </div>
+      </form>
     </div>
     <br />
     <div class="mb-5">
       <legend class="border-bottom mb-4">Orders</legend>
       <div class="d-flex p-2 mx-auto width: 300px">
         <a href="/orders" class="btn btn-primary mr-3">View Orders</a>
-        <a href="#" class="btn btn-primary">Make Order</a>
+        <a href="/orders/new" class="btn btn-primary">Make Order</a>
       </div>
     </div>
   </div>

@@ -53,6 +53,10 @@ class UpdateAccountForm(FlaskForm):
             raise ValidationError("Email taken. Choose a different one.")
 
 
+class DeleteAccountForm(FlaskForm):
+    delete = SubmitField("Delete")
+
+
 class OrderForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     requirements = TextAreaField("Requirements", validators=[DataRequired()])

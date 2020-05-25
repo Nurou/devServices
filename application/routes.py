@@ -9,13 +9,19 @@ from flask_login import (
 
 # app needs to be imported as it's used by decorators below
 from application import app, db, bcrypt
-from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, OrderForm
+from application.forms import (
+    RegistrationForm,
+    LoginForm,
+    UpdateAccountForm,
+    DeleteAccountForm,
+    OrderForm,
+)
 from application.models import Account, Role, Order
 
 
 @app.route("/")
 def home():
-    return render_template("index.html", services=services, developers=developers)
+    return render_template("index.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -71,6 +77,17 @@ def logout():
 @login_required
 def account():
     form = UpdateAccountForm()
+    delete_form = DeleteAccountForm()
+
+    if delete_form.delete.data:
+        flash("Your account has been deleted.", "danger")
+        print(current_user)
+
+        # Account.query(username=current_user.username).first()
+        account = Account.query.get_or_404(current_user.id)
+        db.session.delete(account)
+        db.session.commit()
+        return redirect(url_for("register"))
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
@@ -81,7 +98,9 @@ def account():
         # populate form data
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template("account.html", title="Account", form=form)
+    return render_template(
+        "account.html", title="Account", form=form, delete_form=delete_form
+    )
 
 
 @app.route("/orders")

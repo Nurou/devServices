@@ -37,7 +37,6 @@ def register():
             email=form.email.data,
             username=form.username.data,
             password=hashed_pw,
-            role="client",
         )
         db.session.add(account)
         db.session.commit()

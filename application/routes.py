@@ -61,7 +61,7 @@ def login():
         if account and bcrypt.check_password_hash(account.password, form.password.data):
             login_user(account, remember=form.remember.data)
             flash("You have been logged in!", "success")
-            return redirect(url_for("home"))
+            return redirect(url_for("account"))
     flash("Login Unsuccessful. Please check username and password", "danger")
     return redirect(url_for("login"))
 
@@ -70,7 +70,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("home"))
+    return redirect(url_for("login"))
 
 
 @app.route("/account", methods=["GET", "POST"])
@@ -81,9 +81,6 @@ def account():
 
     if delete_form.delete.data:
         flash("Your account has been deleted.", "danger")
-        print(current_user)
-
-        # Account.query(username=current_user.username).first()
         account = Account.query.get_or_404(current_user.id)
         db.session.delete(account)
         db.session.commit()
@@ -117,7 +114,7 @@ def new_order():
         order = Order(
             title=form.title.data,
             requirements=form.requirements.data,
-            account=current_user,
+            account_id=current_user.id,
         )
         db.session.add(order)
         db.session.commit()

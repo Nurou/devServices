@@ -42,12 +42,12 @@
       <nav class="nav__links">
         <ul>
           {% if current_user.is_authenticated %}
-          <li><a href={{ url_for('new_order') }}>New Order</a></li>
-          <li><a href={{ url_for('account') }}>Account</a></li>
-          <li><a href={{ url_for('logout') }}>Logout</a></li>
+          <li><a href={{ url_for('orders.new_order') }}>New Order</a></li>
+          <li><a href={{ url_for('accounts.account') }}>Account</a></li>
+          <li><a href={{ url_for('accounts.logout') }}>Logout</a></li>
           {% else %}
-          <li><a href={{ url_for('register') }}>Register</a></li>
-          <li><a href={{ url_for('login') }}>Login</a></li>
+          <li><a href={{ url_for('accounts.register') }}>Register</a></li>
+          <li><a href={{ url_for('accounts.login') }}>Login</a></li>
           {% endif %}
         </ul>
       </nav>

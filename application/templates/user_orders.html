@@ -7,7 +7,7 @@
       <div class="article-metadata">
         <a
           class="mr-2"
-          href="{{ url_for('orders', username=order.account.username) }}"
+          href="{{ url_for('orders.user_orders', username=order.account.username) }}"
           >{{ order.account.username }}</a
         >
         <small class="text-muted"
@@ -17,7 +17,7 @@
       <h2>
         <a
           class="article-title"
-          href="{{ url_for('order', order_id=order.id) }}"
+          href="{{ url_for('orders.order', order_id=order.id) }}"
           >{{ order.title }}</a
         >
       </h2>

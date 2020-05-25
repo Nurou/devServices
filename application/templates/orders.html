@@ -8,7 +8,7 @@
             <div class="article-metadata">
               <small class="text-muted">{{ order.date_created.strftime('%Y-%m-%d') }}</small>
             </div>
-            <h2><a class="article-title" href="{{ url_for('order',order_id=order.id) }}">{{ order.title }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('orders.order',order_id=order.id) }}">{{ order.title }}</a></h2>
             <p class="article-content">{{ order.requirements }}</p>
           </div>
         </article>

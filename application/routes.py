@@ -27,7 +27,7 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("home"))
+        return redirect(url_for("main.home"))
     form = RegistrationForm()
     if form.validate_on_submit():
         # hash pw to prepare it for db
@@ -43,14 +43,14 @@ def register():
         flash(
             f"Account created for {form.username.data}! You can now log in", "success"
         )
-        return redirect(url_for("login"))
+        return redirect(url_for("accounts.login"))
     return render_template("register.html", title="Register", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("home"))
+        return redirect(url_for("main.home"))
     form = LoginForm()
     if request.method == "GET":
         return render_template("login.html", title="Login", form=form)
@@ -60,16 +60,16 @@ def login():
         if account and bcrypt.check_password_hash(account.password, form.password.data):
             login_user(account, remember=form.remember.data)
             flash("You have been logged in!", "success")
-            return redirect(url_for("account"))
+            return redirect(url_for("accounts.account"))
     flash("Login Unsuccessful. Please check username and password", "danger")
-    return redirect(url_for("login"))
+    return redirect(url_for("accounts.login"))
 
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("login"))
+    return redirect(url_for("accounts.login"))
 
 
 @app.route("/account", methods=["GET", "POST"])
@@ -83,13 +83,13 @@ def account():
         account = Account.query.get_or_404(current_user.id)
         db.session.delete(account)
         db.session.commit()
-        return redirect(url_for("register"))
+        return redirect(url_for("accounts.register"))
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
         flash("Your account has been updated!", "success")
-        return redirect(url_for("account"))
+        return redirect(url_for("accounts.account"))
     elif request.method == "GET":
         # populate form data
         form.username.data = current_user.username
@@ -125,7 +125,7 @@ def new_order():
         db.session.add(order)
         db.session.commit()
         flash("Your order has been created!", "success")
-        return redirect(url_for("user_orders", username=current_user.username))
+        return redirect(url_for("orders.user_orders", username=current_user.username))
     return render_template(
         "create_order.html", title="New Orders", form=form, legend="New Order"
     )
@@ -164,7 +164,7 @@ def update_order(order_id):
         order.requirements = form.requirements.data
         db.session.commit()
         flash("Your order has been updated!", "success")
-        return redirect(url_for("order", order_id=order.id))
+        return redirect(url_for("orders.order", order_id=order.id))
     elif request.method == "GET":
         form.title.data = order.title
         form.requirements.data = order.requirements
@@ -182,4 +182,4 @@ def delete_order(order_id):
     db.session.delete(order)
     db.session.commit()
     flash("Your order has been deleted!", "success")
-    return redirect(url_for("home"))
+    return redirect(url_for("main.home"))

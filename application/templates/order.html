@@ -1,0 +1,75 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a
+          class="mr-2"
+          href="{{ url_for('user_orders', username=order.account.username) }}"
+          >{{ order.account.username }}</a
+        >
+        <small class="text-muted"
+          >{{ order.date_created.strftime('%Y-%m-%d') }}</small
+        >
+        {% if order.account == current_user %}
+        <div class="d-flex flex-column">
+          <h2 class="article-title">{{ order.title }}</h2>
+          <p class="article-content">{{ order.requirements }}</p>
+          <div class="d-flex">
+            <a
+              class="btn btn-secondary btn-sm mt-1 mb-1"
+              href="{{ url_for('update_order', order_id=order.id) }}"
+              >Update</a
+            >
+            <button
+              type="button"
+              class="btn btn-danger btn-sm m-1"
+              data-toggle="modal"
+              data-target="#deleteModal"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="deleteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Cancel Order?</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <form
+            action="{{ url_for('delete_order', order_id=order.id) }}"
+            method="POST"
+          >
+            <input class="btn btn-danger" type="submit" value="Delete" />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+  <h1 class="mb-3">Orders by {{ client.username }} ({{ orders.total }})</h1>
+  {% for order in orders.items %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a
+          class="mr-2"
+          href="{{ url_for('orders', username=order.account.username) }}"
+          >{{ order.account.username }}</a
+        >
+        <small class="text-muted"
+          >{{ order.date_created.strftime('%Y-%m-%d') }}</small
+        >
+      </div>
+      <h2>
+        <a
+          class="article-title"
+          href="{{ url_for('order', order_id=order.id) }}"
+          >{{ order.title }}</a
+        >
+      </h2>
+      <p class="article-content">{{ order.requirements }}</p>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+{% endblock content %}

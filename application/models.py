@@ -26,6 +26,7 @@ class Account(db.Model, UserMixin):
         lazy=True - db will load data in one go as necessary
      """
     role = db.relationship("Role", backref="account", lazy=True)
+    orders = db.relationship("Order", backref="account", lazy=True)
 
     def __repr__(self):
         return f"Account('{self.username}', '{self.email}', '{self.password}')"
@@ -53,4 +54,4 @@ class Order(db.Model):
     account_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
 
     def __repr__(self):
-        return f"User('{self.date_created}', '{self.date_modified}')"
+        return f"User('{self.title}', '{self.requirements}', '{self.date_created}', '{self.date_modified}')"

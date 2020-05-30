@@ -2,8 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-
-# app = Flask(__name__)
+from application.config import Config_PROD, Config_TEST
 
 
 # db object for interacting with the db - can use it to query db
@@ -15,31 +14,19 @@ login_manager.login_view = "login"
 login_manager.login_message_category = "info"
 login_manager.login_message = "Please login to use this functionality."
 
-# from application import routes
 
-# db.create_all()
-
-
-def create_app():
+def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app = Flask(__name__)
 
-    # log all queries
-    app.config["SQLALCHEMY_ECHO"] = True
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = "6391c84926554768c34560ab1ff4d839"
-
-    ENV = "prod"
+    ENV = "dev"
 
     if ENV == "dev":
         app.debug = True
-        app.config[
-            "SQLALCHEMY_DATABASE_URI"
-        ] = "postgresql://postgres:123456@localhost/devServices"
+        app.config.from_object(Config_TEST)
+
     else:
         app.debug = False
-        app.config[
-            "SQLALCHEMY_DATABASE_URI"
-        ] = "postgres://lzhvtfufywmlwi:e28454e9e7ca660b7705a31b201b1dadaddfffa04045034cc353450388d14f69@ec2-18-235-20-228.compute-1.amazonaws.com:5432/d1jvsaumt4o3pl"
+        app.config.from_object(Config_PROD)
 
     db.init_app(app)
     bcrypt.init_app(app)

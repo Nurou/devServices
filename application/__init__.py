@@ -35,9 +35,11 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     from application.accounts.routes import accounts
     from application.orders.routes import orders
     from application.main.routes import main
+    from application.errors.handlers import errors
 
     app.register_blueprint(accounts)
     app.register_blueprint(orders)
     app.register_blueprint(main)
+    app.register_blueprint(errors)
 
     return app

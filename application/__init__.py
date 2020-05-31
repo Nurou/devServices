@@ -10,7 +10,7 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 # handles the session machinery to help you login and logout users
 login_manager = LoginManager()
-login_manager.login_view = "login"
+login_manager.login_view = "accounts_login"
 login_manager.login_message_category = "info"
 login_manager.login_message = "Please login to use this functionality."
 
@@ -18,7 +18,7 @@ login_manager.login_message = "Please login to use this functionality."
 def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app = Flask(__name__)
 
-    ENV = "prod"
+    ENV = "dev"
 
     if ENV == "dev":
         app.debug = True

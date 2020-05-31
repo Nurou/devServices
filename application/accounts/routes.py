@@ -3,7 +3,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from application import db, bcrypt
 from application.accounts.forms import (RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm)
-from application.models import Account
+from application.accounts.models import Account
 accounts = Blueprint('accounts', __name__)
 
 
@@ -33,7 +33,7 @@ def register():
 @accounts.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("main.home"))
+        return redirect(url_for("accounts.account"))
     form = LoginForm()
     if request.method == "GET":
         return render_template("login.html", title="Login", form=form)

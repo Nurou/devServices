@@ -1,1 +1,9 @@
-{% extends "layout.html" %} {% block content %} {% endblock content %}
+{% extends "layout.html" %} {% block content %}
+<div class="container d-flex p-2 flex-column">
+  <h1 class="mx-auto w-3 pb-5">Welcome to DevServices</h1>
+  <div class="jumbotron">
+    <h2 class="p-4 cover-heading ">Quality digital services delivered to you by industry experts.</h2>
+    <a href={{url_for('accounts.register')}} class="btn btn-lg btn-success mx-auto">Sign Up Today!</a>
+  </div>
+</div>
+{% endblock content %}

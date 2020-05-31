@@ -18,7 +18,7 @@ login_manager.login_message = "Please login to use this functionality."
 def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app = Flask(__name__)
 
-    ENV = "dev"
+    ENV = "prod"
 
     if ENV == "dev":
         app.debug = True

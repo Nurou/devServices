@@ -8,19 +8,6 @@ from application.orders.forms import OrderForm
 orders = Blueprint("orders", __name__)
 
 
-# @orders.route("/orders")
-# @login_required
-# def orders():
-#     page = request.args.get("page", 1, type=int)
-#     client = Account.query.filter_by(username=username).first_or_404()
-#     orders = (
-#         Order.query.filter_by(account=client)
-#         .order_by(Post.date_posted.desc())
-#         .paginate(page=page, per_page=5)
-#     )
-#     return render_template("orders.html", title="Orders", user=current_user)
-
-
 @orders.route("/orders/new", methods=["GET", "POST"])
 @login_required
 def new_order():

@@ -14,9 +14,9 @@ bcrypt = Bcrypt()
 
 # Flask-login configuration
 login_manager = LoginManager()
-login_manager.login_view = "accounts_login"
+login_manager.login_view = "accounts.login"
 login_manager.login_message_category = "info"
-login_manager.login_message = "Please login to use this functionality."
+login_manager.login_message = "Please login as admin to use this functionality."
 
 
 def login_required(_func=None, *, role="ANY"):
@@ -63,5 +63,11 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app.register_blueprint(orders)
     app.register_blueprint(main)
     app.register_blueprint(errors)
+
+    try:
+        with app.app_context():
+            db.create_all()
+    except:
+        pass
 
     return app

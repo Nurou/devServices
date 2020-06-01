@@ -22,7 +22,7 @@ class Account(Base, UserMixin):
         backref: the account can be referenced from Role by the backref 
         lazy=True - db will load data in one go as necessary
      """
-    role = db.relationship("Role", backref="account", lazy=True)
+    roles = db.relationship("Role", backref="account", lazy=True)
     orders = db.relationship("Order", backref="account", lazy=True)
 
     def __repr__(self):
@@ -31,24 +31,8 @@ class Account(Base, UserMixin):
     def __init__(self, name):
         self.name = name
 
-    @staticmethod
-    def has_orders(order_id, user_id):
-        statement = text(
-            "SELECT * "
-            "FROM account_order, account "
-            "WHERE account_order.account_id = :user "
-            "AND account_order.order_id = :order "
-            "AND account.id = :user;"
-        ).params(user=user_id, order=order_id)
-        res = db.engine.execute(statement)
-
-        response = []
-        for row in res:
-            response.append({"count": row[0]})
-
-        print(len(response))
-
-        return len(response) > 0
+    def roles(self):
+        return ["ADMIN"]
 
 
 class Role(Base):

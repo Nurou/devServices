@@ -1,7 +1,7 @@
 
 from flask import render_template, url_for, flash, redirect, request, Blueprint
-from flask_login import login_user, current_user, logout_user, login_required
-from application import db, bcrypt
+from flask_login import login_user, current_user, logout_user
+from application import db, bcrypt, login_required
 from application.auth.forms import (RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm)
 from application.auth.models import Account
 accounts = Blueprint('accounts', __name__)
@@ -79,4 +79,12 @@ def account():
         form.email.data = current_user.email
     return render_template(
         "account.html", title="Account", form=form, delete_form=delete_form
+    )
+    
+    
+@accounts.route("/admin", methods=["GET", "POST"])
+@login_required(role="s")
+def admin():
+    return render_template(
+        "dashboard.html", title="Admin Dashboard"
     )

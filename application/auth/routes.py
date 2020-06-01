@@ -82,9 +82,16 @@ def account():
     )
     
     
-@accounts.route("/admin", methods=["GET", "POST"])
-@login_required(role="s")
+@accounts.route("/admin", methods=["GET"])
+@login_required(role="ADMIN")
 def admin():
     return render_template(
         "dashboard.html", title="Admin Dashboard"
+    )
+    
+@accounts.route("/admin/clients", methods=["GET"])
+@login_required(role="ADMIN")
+def clients():
+    return render_template(
+        "clients.html", title="Clients"
     )

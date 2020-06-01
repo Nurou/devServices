@@ -1,38 +1,60 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from application.config import Config_PROD, Config_TEST
+from functools import wraps
+import os
 
 
-# db object for interacting with the db - can use it to query db
+# database instance preparation
 db = SQLAlchemy()
+
 bcrypt = Bcrypt()
-# handles the session machinery to help you login and logout users
+
+# Flask-login configuration
 login_manager = LoginManager()
 login_manager.login_view = "accounts_login"
 login_manager.login_message_category = "info"
 login_manager.login_message = "Please login to use this functionality."
 
 
+def login_required(_func=None, *, role="ANY"):
+    def wrapper(func):
+        @wraps(func)
+        def decorated_view(*args, **kwargs):
+            if not (current_user and current_user.is_authenticated):
+                return login_manager.unauthorized()
+
+            acceptable_roles = set(("ANY", *current_user.roles()))
+
+            if role not in acceptable_roles:
+                return login_manager.unauthorized()
+
+            return func(*args, **kwargs)
+
+        return decorated_view
+
+    return wrapper if _func is None else wrapper(_func)
+
+
 def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app = Flask(__name__)
 
-    ENV = "dev"
-
-    if ENV == "dev":
-        app.debug = True
-        app.config.from_object(Config_TEST)
-
-    else:
+    if os.environ.get("ON_HEROKU"):
         app.debug = False
         app.config.from_object(Config_PROD)
 
+    else:
+        app.debug = True
+        app.config.from_object(Config_TEST)
+
+    # initialise middleware
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
 
-    from application.accounts.routes import accounts
+    from application.auth.routes import accounts
     from application.orders.routes import orders
     from application.main.routes import main
     from application.errors.handlers import errors

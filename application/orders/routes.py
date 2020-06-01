@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, abort, Blu
 from flask_login import current_user, login_required
 from application import db
 from application.orders.models import Order
-from application.accounts.models import Account
+from application.auth.models import Account
 from application.orders.forms import OrderForm
 
 orders = Blueprint("orders", __name__)

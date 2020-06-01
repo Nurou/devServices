@@ -1,6 +1,7 @@
 from application import db, login_manager
 from flask_login import UserMixin
 from application.models import Base
+from sqlalchemy.sql import text
 
 # telling flask login that we're representing an account here
 @login_manager.user_loader
@@ -25,6 +26,39 @@ class Account(Base, UserMixin):
 
     def __repr__(self):
         return f"Account('{self.username}', '{self.email}', '{self.password}')"
+
+    def __init__(self, name):
+        self.name = name
+
+    def get_id(self):
+        return self.id
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+    
+    @staticmethod
+    def has_orders(order_id, user_id):
+        statement = text("SELECT * "
+                    "FROM account_order, account "
+                    "WHERE account_order.account_id = :user "
+                    "AND account_order.order_id = :order "
+                    "AND account.id = :user;").params(user=user_id, order=order_id)
+        res = db.engine.execute(statement)
+
+        response = []
+        for row in res:
+            response.append({"count": row[0]})
+
+        print(len(response))
+        
+        return len(response) > 0
+
 
 
 class Role(Base):

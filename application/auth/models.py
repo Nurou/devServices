@@ -12,7 +12,14 @@ def load_user(account_id):
 
 # user mixin adds the properties that belong to it to our model class
 # includes is_active, is_authenticated ...
-class Account(Base, UserMixin):
+class Account(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(
+        db.DateTime,
+        default=db.func.current_timestamp(),
+        onupdate=db.func.current_timestamp(),
+    )
     name = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -28,8 +35,11 @@ class Account(Base, UserMixin):
     def __repr__(self):
         return f"Account('{self.username}', '{self.email}', '{self.password}')"
 
-    def __init__(self, name):
+    def __init__(self, name, username, password, email):
         self.name = name
+        self.username = username
+        self.password = password
+        self.email = email
 
     def roles(self):
         return ["ADMIN"]

@@ -34,6 +34,7 @@ def login_required(_func=None, *, role="ANY"):
             return func(*args, **kwargs)
 
         return decorated_view
+        wrapper.__name__ = func.__name__
 
     return wrapper if _func is None else wrapper(_func)
 

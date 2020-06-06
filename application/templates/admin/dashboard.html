@@ -1,0 +1,10 @@
+{% extends "admin/layout.html" %} {% block content %}
+<div class="container">
+  <h1>Welcome Admin</h1>
+  <a
+  href="{{ url_for('accounts.agency_orders') }}"
+  class="btn btn-primary mr-3"
+  >Outstanding Orders</a>
+</div>
+
+{% endblock content %}

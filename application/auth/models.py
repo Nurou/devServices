@@ -29,11 +29,7 @@ def login_required(_func=None, *, role="ANY"):
               
               if user_role == role:
                   unauthorized = False
-          print("**********************")
-          print(role)
-          print(current_user.role.name)
-          print("**********************")
-                    
+                  
           if unauthorized:
               return login_manager.unauthorized()
 

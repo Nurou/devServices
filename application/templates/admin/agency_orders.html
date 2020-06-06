@@ -1,0 +1,9 @@
+{% extends "admin/layout.html" %} {% block content %}
+<div class="container">
+  <h1>All orders</h1>
+  {% for client in clients %}
+  <li>{{ client.name }}</li>
+  {% endfor %}
+</div>
+
+{% endblock content %}

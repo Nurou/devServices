@@ -29,7 +29,7 @@ def register():
             f"Account created for {form.username.data}! You can now log in", "success"
         )
         return redirect(url_for("accounts.login"))
-    return render_template("register.html", title="Register", form=form)
+    return render_template("client/register.html", title="Register", form=form)
 
 
 @accounts.route("/login", methods=["GET", "POST"])
@@ -38,7 +38,7 @@ def login():
         return redirect(url_for("accounts.account"))
     form = LoginForm()
     if request.method == "GET":
-        return render_template("login.html", title="Login", form=form)
+        return render_template("client/login.html", title="Login", form=form)
     if form.validate_on_submit():
         account = Account.query.filter_by(username=form.username.data).first()
         print(account)
@@ -81,7 +81,7 @@ def account():
         # form.username.data = current_user.username
         # form.email.data = current_user.email
     return render_template(
-        "account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
+        "client/account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
     )
     
     
@@ -89,12 +89,27 @@ def account():
 @login_required(role="ADMIN")
 def admin():
     return render_template(
-        "dashboard.html", title="Admin Dashboard"
+        "admin/dashboard.html", title="Admin Dashboard"
     )
     
 @accounts.route("/admin/clients", methods=["GET"])
 @login_required(role="ADMIN")
 def clients():
     return render_template(
-        "clients.html", title="Clients"
+        "admin/clients.html", title="Clients"
     )
+    
+@accounts.route("/admin/agency_orders", methods=["GET"])
+@login_required(role="ADMIN")
+def agency_orders():
+    # query all orders made by clients
+    clients =  Account.query.filter_by(role_id = 2)
+    print(clients)
+    return render_template(
+        "admin/agency_orders.html", title="All orders", clients=clients
+    )
+    
+@accounts.route("/admin/developers", methods=["GET"])
+@login_required(role="ADMIN")
+def developers():
+    return render_template("admin/developers.html")

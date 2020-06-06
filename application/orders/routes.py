@@ -23,7 +23,7 @@ def new_order():
         flash("Your order has been created!", "success")
         return redirect(url_for("orders.client_orders", username=current_user.username))
     return render_template(
-        "create_order.html", title="New Orders", form=form, legend="New Order"
+        "client/create_order.html", form=form, legend="New Order"
     )
 
 
@@ -37,7 +37,7 @@ def client_orders(username):
         .order_by(Order.date_created.desc())
         .paginate(page=page, per_page=5)
     )
-    return render_template("client_orders.html", orders=orders, client=client)
+    return render_template("client/client_orders.html", orders=orders, client=client)
 
 
 @orders.route("/order/<int:order_id>")
@@ -45,7 +45,7 @@ def client_orders(username):
 def order(order_id):
     order = Order.query.get_or_404(order_id)
     print(order)
-    return render_template("order.html", title=order.title, order=order)
+    return render_template("client/order.html", title=order.title, order=order)
 
 
 @orders.route("/order/<int:order_id>/update", methods=["GET", "POST"])
@@ -65,7 +65,7 @@ def update_order(order_id):
         form.title.data = order.title
         form.requirements.data = order.requirements
     return render_template(
-        "create_order.html", title="Update Order", form=form, legend="Update Order"
+        "client/create_order.html", title="Update Order", form=form, legend="Update Order"
     )
 
 

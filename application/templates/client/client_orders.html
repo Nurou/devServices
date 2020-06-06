@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "client/layout.html" %} {% block content %}
 <div class="container">
   <h1 class="mb-3">Orders by {{ client.username }} ({{ orders.total }})</h1>
   {% if orders.total == 0 %}

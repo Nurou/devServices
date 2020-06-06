@@ -27,7 +27,7 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
         app.config.from_object(Config_PROD)
 
     else:
-        app.debug = False
+        app.debug = True
         app.config.from_object(Config_TEST)
 
     # initialise middleware
@@ -49,8 +49,6 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
         with app.app_context():
           from application.auth.models import Role, Account
           from application.orders.models import Order  
-          from application.auth.models import Role, Account
-          Account.__table__.drop()
           db.create_all()
     except:
         pass

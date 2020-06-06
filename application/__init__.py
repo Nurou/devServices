@@ -1,5 +1,5 @@
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
 from application.config import Config_PROD, Config_TEST
@@ -19,24 +19,7 @@ login_manager.login_message_category = "info"
 login_manager.login_message = "Please login as admin to use this functionality."
 
 
-def login_required(_func=None, *, role="ANY"):
-    def wrapper(func):
-        @wraps(func)
-        def decorated_view(*args, **kwargs):
-            if not (current_user and current_user.is_authenticated):
-                return login_manager.unauthorized()
 
-            acceptable_roles = set(("ANY", *current_user.roles()))
-
-            if role not in acceptable_roles:
-                return login_manager.unauthorized()
-
-            return func(*args, **kwargs)
-
-        return decorated_view
-        wrapper.__name__ = func.__name__
-
-    return wrapper if _func is None else wrapper(_func)
 
 
 def create_app(config_test=Config_TEST, config_prod=Config_PROD):

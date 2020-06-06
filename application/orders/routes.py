@@ -21,7 +21,7 @@ def new_order():
         db.session.add(order)
         db.session.commit()
         flash("Your order has been created!", "success")
-        return redirect(url_for("orders.user_orders", username=current_user.username))
+        return redirect(url_for("orders.client_orders", username=current_user.username))
     return render_template(
         "create_order.html", title="New Orders", form=form, legend="New Order"
     )
@@ -29,7 +29,7 @@ def new_order():
 
 @orders.route("/account/<string:username>")
 @login_required
-def user_orders(username):
+def client_orders(username):
     page = request.args.get("page", 1, type=int)
     client = Account.query.filter_by(username=username).first_or_404()
     orders = (
@@ -37,7 +37,7 @@ def user_orders(username):
         .order_by(Order.date_created.desc())
         .paginate(page=page, per_page=5)
     )
-    return render_template("user_orders.html", orders=orders, client=client)
+    return render_template("client_orders.html", orders=orders, client=client)
 
 
 @orders.route("/order/<int:order_id>")

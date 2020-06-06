@@ -3,23 +3,50 @@ from flask_login import UserMixin
 from application.models import Base
 from sqlalchemy.sql import text
 
+from application import current_user
+from functools import wraps
+
 # telling flask login that we're representing an account here
 # this callback is used to reload the user object from the user ID stored in the session
 @login_manager.user_loader
 def load_user(account_id):
     return Account.query.get(int(account_id))
+  
+  
+def login_required(_func=None, *, role="ANY"):
+  def wrapper(func):
+      @wraps(func)
+      def decorated_view(*args, **kwargs):
+          if not (current_user and current_user.is_authenticated):
+              return login_manager.unauthorized()
+
+          acceptable_roles = set(("ANY", *current_user.roles()))
+          
+          print(current_user.id)
+          print(acceptable_roles)
+          
+          if role not in acceptable_roles:
+              return login_manager.unauthorized()
+
+          return func(*args, **kwargs)
+
+      return decorated_view
+      wrapper.__name__ = func.__name__
+
+  return wrapper if _func is None else wrapper(_func)
+  
+  
+# Define the UserRoles association table
+class AccountRoles(db.Model):
+    __tablename__ = 'account_roles'
+    id = db.Column(db.Integer(), primary_key=True)
+    account_id = db.Column(db.Integer(), db.ForeignKey('accounts.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
 
 
 # user mixin adds the properties that belong to it to our model class
 # includes is_active, is_authenticated ...
-class Account(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(
-        db.DateTime,
-        default=db.func.current_timestamp(),
-        onupdate=db.func.current_timestamp(),
-    )
+class Account(Base, UserMixin):
     name = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -29,11 +56,11 @@ class Account(db.Model, UserMixin):
         backref: the account can be referenced from Role by the backref 
         lazy=True - db will load data in one go as necessary
      """
-    roles = db.relationship("Role", backref="account", lazy=True)
+    roles = db.relationship("Role", backref="account", lazy=True, secondary='account_roles')
     orders = db.relationship("Order", backref="account", lazy=True)
 
     def __repr__(self):
-        return f"Account('{self.username}', '{self.email}', '{self.password}')"
+        return f"Account('{self.name}','{self.username}', '{self.email}', '{self.password}')"
 
     def __init__(self, name, username, password, email):
         self.name = name
@@ -42,12 +69,14 @@ class Account(db.Model, UserMixin):
         self.email = email
 
     def roles(self):
+        print("*********")
+        print(Account.query.filter_by(id=self.id).first().roles)
+        print("*********")
         return ["ADMIN"]
 
 
-class Role(Base):
+class Role(Base):  
     name = db.Column(db.String(40), unique=True, nullable=False)
-    account_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
 
     def __init__(self, name):
         self.name = name

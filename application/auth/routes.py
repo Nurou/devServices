@@ -1,10 +1,12 @@
 
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user
-from application import db, bcrypt, login_required
+from application import db, bcrypt
+from application.auth.models import login_required
 from application.auth.forms import (RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm)
 from application.auth.models import Account
 accounts = Blueprint('accounts', __name__)
+
 
 
 @accounts.route("/register", methods=["GET", "POST"])
@@ -17,7 +19,7 @@ def register():
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
         account = Account(
             name=form.name.data,
-            email=form.email.data,
+            email=form.email.data,  
             username=form.username.data,
             password=hashed_pw,
         )
@@ -60,6 +62,7 @@ def logout():
 def account():
     form = UpdateAccountForm()
     delete_form = DeleteAccountForm()
+    print(current_user)
 
     if delete_form.delete.data:
         flash("Your account has been deleted.", "danger")
@@ -74,11 +77,12 @@ def account():
         flash("Your account has been updated!", "success")
         return redirect(url_for("accounts.account"))
     elif request.method == "GET":
+      print("hey")
         # populate form data
-        form.username.data = current_user.username
-        form.email.data = current_user.email
+        # form.username.data = current_user.username
+        # form.email.data = current_user.email
     return render_template(
-        "account.html", title="Account", form=form, delete_form=delete_form
+        "account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
     )
     
     

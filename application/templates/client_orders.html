@@ -1,13 +1,16 @@
 {% extends "layout.html" %} {% block content %}
 <div class="container">
   <h1 class="mb-3">Orders by {{ client.username }} ({{ orders.total }})</h1>
+  {% if orders.total == 0 %}
+    <a href="{{ url_for('orders.new_order', username=current_user.username) }}" class="btn btn-primary">Make Order</a>
+  {% endif %}
   {% for order in orders.items %}
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
         <a
           class="mr-2"
-          href="{{ url_for('orders.user_orders', username=order.account.username) }}"
+          href="{{ url_for('orders.client_orders', username=order.account.username) }}"
           >{{ order.account.username }}</a
         >
         <small class="text-muted"

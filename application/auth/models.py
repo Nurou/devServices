@@ -20,12 +20,21 @@ def login_required(_func=None, *, role="ANY"):
           if not (current_user and current_user.is_authenticated):
               return login_manager.unauthorized()
 
-          acceptable_roles = set(("ANY", *current_user.roles()))
-          
-          print(current_user.id)
-          print(acceptable_roles)
-          
-          if role not in acceptable_roles:
+          unauthorized = False
+
+          if role != "ANY":
+              unauthorized = True
+              
+              user_role = current_user.role.name
+              
+              if user_role == role:
+                  unauthorized = False
+          print("**********************")
+          print(role)
+          print(current_user.role.name)
+          print("**********************")
+                    
+          if unauthorized:
               return login_manager.unauthorized()
 
           return func(*args, **kwargs)
@@ -54,7 +63,7 @@ class Account(Base, UserMixin):
     orders = db.relationship("Order", backref="account", lazy=True)
 
     def __repr__(self):
-        return f"Account('{self.name}','{self.username}', '{self.email}', '{self.password}')"
+        return f"Account('{self.name}','{self.username}', '{self.email}', '{self.password}', '{self.role}')"
 
     def __init__(self, name, username, password, email, role):
         self.name = name
@@ -64,11 +73,8 @@ class Account(Base, UserMixin):
         self.role = role
 
     def roles(self):
-        print("*********")
         account=Account.query.filter_by(username=self.username).first()
-        print(account)
-        print("*********")
-        return ["ADMIN"]
+        return account.role.name
 
 
 class Role(Base):  

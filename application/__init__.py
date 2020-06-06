@@ -27,7 +27,7 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
         app.config.from_object(Config_PROD)
 
     else:
-        app.debug = True
+        app.debug = False
         app.config.from_object(Config_TEST)
 
     # initialise middleware
@@ -44,8 +44,6 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app.register_blueprint(orders)
     app.register_blueprint(main)
     app.register_blueprint(errors)
-    
-
     
     try:
         with app.app_context():

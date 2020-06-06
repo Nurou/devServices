@@ -44,10 +44,22 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app.register_blueprint(orders)
     app.register_blueprint(main)
     app.register_blueprint(errors)
+    
+
+    
+    try:
+        with app.app_context():
+          from application.auth.models import Role, Account
+          from application.orders.models import Order  
+          from application.auth.models import Role, Account
+          Account.__table__.drop()
+          db.create_all()
+    except:
+        pass
 
     try:
         with app.app_context():
-            from application.auth.models import Role, Account, AccountRoles
+            from application.auth.models import Role, Account
             from application.orders.models import Order
             
             role = Role.query.filter_by(name='ADMIN').first()
@@ -60,7 +72,6 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
               role = Role('CLIENT')
               db.session().add(role)
               db.session().commit()
-            db.create_all()
     except:
         pass
 

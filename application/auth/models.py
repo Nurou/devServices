@@ -35,13 +35,6 @@ def login_required(_func=None, *, role="ANY"):
 
   return wrapper if _func is None else wrapper(_func)
   
-  
-# Define the UserRoles association table
-class AccountRoles(db.Model):
-    __tablename__ = 'account_roles'
-    id = db.Column(db.Integer(), primary_key=True)
-    account_id = db.Column(db.Integer(), db.ForeignKey('account.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
 
 
 # user mixin adds the properties that belong to it to our model class
@@ -56,23 +49,23 @@ class Account(Base, UserMixin):
         backref: the account can be referenced from Role by the backref 
         lazy=True - db will load data in one go as necessary
      """
-    roles = db.relationship("Role", backref="account", lazy=True, secondary='account_roles', uselist=False)
+    role = db.relationship("Role", backref="account", lazy=True)
+    role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable=True)
     orders = db.relationship("Order", backref="account", lazy=True)
 
     def __repr__(self):
         return f"Account('{self.name}','{self.username}', '{self.email}', '{self.password}')"
 
-    def __init__(self, name, username, password, email, roles):
+    def __init__(self, name, username, password, email, role):
         self.name = name
         self.username = username
         self.password = password
         self.email = email
-        self.roles = roles
+        self.role = role
 
     def roles(self):
         print("*********")
         account=Account.query.filter_by(username=self.username).first()
-        roles = Role.query.filter_by(account_id=account.id)
         print(account)
         print("*********")
         return ["ADMIN"]
@@ -80,10 +73,9 @@ class Account(Base, UserMixin):
 
 class Role(Base):  
     name = db.Column(db.String(40), unique=True, nullable=False)
-    account_id = db.Column(db.Integer, db.ForeignKey('account.id'))
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return f"User('{self.name}')"
+        return f"Role('{self.name}')"

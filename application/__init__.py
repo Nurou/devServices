@@ -19,9 +19,6 @@ login_manager.login_message_category = "info"
 login_manager.login_message = "Please login as admin to use this functionality."
 
 
-
-
-
 def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     app = Flask(__name__)
 
@@ -50,6 +47,19 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
 
     try:
         with app.app_context():
+            from application.auth.models import Role, Account, AccountRoles
+            from application.orders.models import Order
+            
+            role = Role.query.filter_by(name='ADMIN').first()
+            if not role:
+              role = Role('ADMIN')
+              db.session().add(role)
+              db.session().commit()
+            role = Role.query.filter_by(name='CLIENT').first()
+            if not role:
+              role = Role('CLIENT')
+              db.session().add(role)
+              db.session().commit()
             db.create_all()
     except:
         pass

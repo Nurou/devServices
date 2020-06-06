@@ -40,8 +40,8 @@ def login_required(_func=None, *, role="ANY"):
 class AccountRoles(db.Model):
     __tablename__ = 'account_roles'
     id = db.Column(db.Integer(), primary_key=True)
-    account_id = db.Column(db.Integer(), db.ForeignKey('accounts.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
+    account_id = db.Column(db.Integer(), db.ForeignKey('account.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
 
 
 # user mixin adds the properties that belong to it to our model class
@@ -56,27 +56,31 @@ class Account(Base, UserMixin):
         backref: the account can be referenced from Role by the backref 
         lazy=True - db will load data in one go as necessary
      """
-    roles = db.relationship("Role", backref="account", lazy=True, secondary='account_roles')
+    roles = db.relationship("Role", backref="account", lazy=True, secondary='account_roles', uselist=False)
     orders = db.relationship("Order", backref="account", lazy=True)
 
     def __repr__(self):
         return f"Account('{self.name}','{self.username}', '{self.email}', '{self.password}')"
 
-    def __init__(self, name, username, password, email):
+    def __init__(self, name, username, password, email, roles):
         self.name = name
         self.username = username
         self.password = password
         self.email = email
+        self.roles = roles
 
     def roles(self):
         print("*********")
-        print(Account.query.filter_by(id=self.id).first().roles)
+        account=Account.query.filter_by(username=self.username).first()
+        roles = Role.query.filter_by(account_id=account.id)
+        print(account)
         print("*********")
         return ["ADMIN"]
 
 
 class Role(Base):  
     name = db.Column(db.String(40), unique=True, nullable=False)
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'))
 
     def __init__(self, name):
         self.name = name

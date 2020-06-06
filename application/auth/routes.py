@@ -76,8 +76,7 @@ def account():
         db.session.commit()
         flash("Your account has been updated!", "success")
         return redirect(url_for("accounts.account"))
-    elif request.method == "GET":
-      print("hey")
+    # elif request.method == "GET":
         # populate form data
         # form.username.data = current_user.username
         # form.email.data = current_user.email

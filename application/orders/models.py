@@ -17,11 +17,10 @@ class Order(Base):
     developers = db.relationship('Developer',
                     secondary=assigned_developers, backref='orders', lazy='dynamic')
 
-    def __init__(self, title, requirements, account_id, is_complete):
+    def __init__(self, title, requirements, account_id):
       self.title = title
       self.requirements = requirements
       self.account_id = account_id
-      self.is_complete = is_complete
        
     def __repr__(self):
         return f"Order('{self.title}', '{self.requirements}', '{self.date_created}', '{self.date_modified}')"

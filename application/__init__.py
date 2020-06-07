@@ -48,7 +48,7 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     try:
         with app.app_context():
           from application.auth.models import Role, Account
-          from application.orders.models import Order
+          from application.orders.models import Order, assigned_developers
           from application.developers.models import Developer  
           from application.services.models import Service  
           db.create_all()

@@ -5,7 +5,10 @@ from application import db, bcrypt
 from application.auth.models import login_required
 from application.auth.forms import (RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm)
 from application.auth.models import Account
+from sqlalchemy.sql import text
+
 accounts = Blueprint('accounts', __name__)
+
 
 
 
@@ -45,6 +48,8 @@ def login():
         if account and bcrypt.check_password_hash(account.password, form.password.data):
             login_user(account, remember=form.remember.data)
             flash("You have been logged in!", "success")
+            if(account.role.name == 'ADMIN'):
+              return redirect(url_for("accounts.dashboard"))
             return redirect(url_for("accounts.account"))
     flash("Login Unsuccessful. Please check username and password", "danger")
     return redirect(url_for("accounts.login"))
@@ -62,7 +67,6 @@ def logout():
 def account():
     form = UpdateAccountForm()
     delete_form = DeleteAccountForm()
-    print(current_user)
 
     if delete_form.delete.data:
         flash("Your account has been deleted.", "danger")
@@ -76,10 +80,9 @@ def account():
         db.session.commit()
         flash("Your account has been updated!", "success")
         return redirect(url_for("accounts.account"))
-    # elif request.method == "GET":
-        # populate form data
-        # form.username.data = current_user.username
-        # form.email.data = current_user.email
+    elif request.method == "GET":
+        form.username.data = current_user.username
+        form.email.data = current_user.email
     return render_template(
         "client/account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
     )
@@ -87,7 +90,7 @@ def account():
     
 @accounts.route("/admin", methods=["GET"])
 @login_required(role="ADMIN")
-def admin():
+def dashboard():
     return render_template(
         "admin/dashboard.html", title="Admin Dashboard"
     )
@@ -113,3 +116,13 @@ def agency_orders():
 @login_required(role="ADMIN")
 def developers():
     return render_template("admin/developers.html")
+  
+  
+@staticmethod
+def find_clients_with_no_orders():
+    stmt = text("SELECT Account.id, Account.name FROM Account"
+                " LEFT JOIN Order ON Order.account_id = Account.id"
+                " WHERE (Order.complete IS null OR Order.complete = 0)"
+                " GROUP BY Account.id"
+                " HAVING COUNT(Order.id) = 0")
+    res = db.engine.execute(stmt)

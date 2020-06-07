@@ -29,7 +29,6 @@ def login_required(_func=None, *, role="ANY"):
               
               if user_role == role:
                   unauthorized = False
-                  
           if unauthorized:
               return login_manager.unauthorized()
 
@@ -69,8 +68,9 @@ class Account(Base, UserMixin):
         self.role = role
 
     def roles(self):
-        account=Account.query.filter_by(username=self.username).first()
-        return account.role.name
+      return self.role.name
+        # account=Account.query.filter_by(username=self.username).first()
+        # return account.role.name
 
 
 class Role(Base):  

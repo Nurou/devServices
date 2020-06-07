@@ -51,7 +51,19 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
           from application.orders.models import Order, assigned_developers
           from application.developers.models import Developer  
           from application.services.models import Service  
+          # initialise tables
           db.create_all()
+          # add roles
+          role = Role.query.filter_by(name='ADMIN').first()
+          if not role:
+            role = Role('ADMIN')
+            db.session().add(role)
+            db.session().commit()
+          role = Role.query.filter_by(name='CLIENT').first()
+          if not role:
+            role = Role('CLIENT')
+            db.session().add(role)
+            db.session().commit()
     except:
         pass
 
@@ -59,16 +71,6 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
         with app.app_context():
             from application.auth.models import Role, Account
             
-            role = Role.query.filter_by(name='ADMIN').first()
-            if not role:
-              role = Role('ADMIN')
-              db.session().add(role)
-              db.session().commit()
-            role = Role.query.filter_by(name='CLIENT').first()
-            if not role:
-              role = Role('CLIENT')
-              db.session().add(role)
-              db.session().commit()
     except:
         pass
 

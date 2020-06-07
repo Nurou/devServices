@@ -3,43 +3,11 @@ from flask_login import UserMixin
 from application.models import Base
 from sqlalchemy.sql import text
 
-from application import current_user
-from functools import wraps
-
 # telling flask login that we're representing an account here
 # this callback is used to reload the user object from the user ID stored in the session
 @login_manager.user_loader
 def load_user(account_id):
     return Account.query.get(int(account_id))
-  
-  
-def login_required(_func=None, *, role="ANY"):
-  def wrapper(func):
-      @wraps(func)
-      def decorated_view(*args, **kwargs):
-          if not (current_user and current_user.is_authenticated):
-              return login_manager.unauthorized()
-
-          unauthorized = False
-
-          if role != "ANY":
-              unauthorized = True
-              
-              user_role = current_user.role.name
-              
-              if user_role == role:
-                  unauthorized = False
-          if unauthorized:
-              return login_manager.unauthorized()
-
-          return func(*args, **kwargs)
-
-      return decorated_view
-      wrapper.__name__ = func.__name__
-
-  return wrapper if _func is None else wrapper(_func)
-  
-
 
 # user mixin adds the properties that belong to it to our model class
 # includes is_active, is_authenticated ...
@@ -69,8 +37,7 @@ class Account(Base, UserMixin):
 
     def roles(self):
       return self.role.name
-        # account=Account.query.filter_by(username=self.username).first()
-        # return account.role.name
+    
 
 
 class Role(Base):  

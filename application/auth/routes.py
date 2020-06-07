@@ -2,15 +2,12 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user
 from application import db, bcrypt
-from application.auth.models import login_required
+from application.auth import login_required
 from application.auth.forms import (RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm)
-from application.auth.models import Account
+from application.auth.models import Account, Role
 from sqlalchemy.sql import text
 
 accounts = Blueprint('accounts', __name__)
-
-
-
 
 @accounts.route("/register", methods=["GET", "POST"])
 def register():
@@ -20,11 +17,13 @@ def register():
     if form.validate_on_submit():
         # hash pw to prepare it for db
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
+        role = Role.query.filter_by(name='CLIENT')
         account = Account(
             name=form.name.data,
             email=form.email.data,  
             username=form.username.data,
             password=hashed_pw,
+            role=role
         )
         db.session.add(account)
         db.session.commit()
@@ -87,6 +86,11 @@ def account():
         "client/account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
     )
     
+@accounts.route("/admin/credentials", methods=["GET"])
+def admin_credentials():
+    return render_template(
+        "client/admin.html", title="Admin Credentials"
+    )
     
 @accounts.route("/admin", methods=["GET"])
 @login_required(role="ADMIN")

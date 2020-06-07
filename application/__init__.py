@@ -38,11 +38,15 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
     from application.auth.routes import accounts
     from application.orders.routes import orders
     from application.main.routes import main
+    from application.developers.routes import developers
+    from application.services.routes import services
     from application.errors.handlers import errors
 
     app.register_blueprint(accounts)
     app.register_blueprint(orders)
     app.register_blueprint(main)
+    app.register_blueprint(developers)
+    app.register_blueprint(services)
     app.register_blueprint(errors)
     
     try:

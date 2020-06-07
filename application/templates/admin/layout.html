@@ -43,8 +43,9 @@
         <ul>
           {% if current_user.is_authenticated %}
           <li><a href={{ url_for('accounts.clients') }}>Clients</a></li>
-          <li><a href={{ url_for('accounts.agency_orders') }}>Orders</a></li>
-          <li><a href={{ url_for('accounts.developers') }}>Developers</a></li>
+          <li><a href={{ url_for('orders.agency_orders') }}>Orders</a></li>
+          <li><a href={{ url_for('developers.view_developers') }}>Developers</a></li>
+          <li><a href={{ url_for('services.view_services') }}>Services</a></li>
           <li><a href={{ url_for('accounts.logout') }}>Logout</a></li>
           {% else %}
           <li><a href={{ url_for('accounts.register') }}>Register</a></li>

@@ -17,7 +17,8 @@ def register():
     if form.validate_on_submit():
         # hash pw to prepare it for db
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
-        role = Role.query.filter_by(name='CLIENT')
+        role = Role.query.filter_by(name='CLIENT').first()
+        print(f"role: {role}")
         account = Account(
             name=form.name.data,
             email=form.email.data,  
@@ -82,6 +83,8 @@ def account():
     elif request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
+    
+    
     return render_template(
         "client/account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
     )
@@ -92,35 +95,20 @@ def admin_credentials():
         "client/admin.html", title="Admin Credentials"
     )
     
-@accounts.route("/admin", methods=["GET"])
+@accounts.route("/dashboard", methods=["GET"])
 @login_required(role="ADMIN")
 def dashboard():
     return render_template(
         "admin/dashboard.html", title="Admin Dashboard"
     )
     
-@accounts.route("/admin/clients", methods=["GET"])
+@accounts.route("/clients", methods=["GET"])
 @login_required(role="ADMIN")
 def clients():
     return render_template(
         "admin/clients.html", title="Clients"
     )
     
-@accounts.route("/admin/agency_orders", methods=["GET"])
-@login_required(role="ADMIN")
-def agency_orders():
-    # query all orders made by clients
-    clients =  Account.query.filter_by(role_id = 2)
-    print(clients)
-    return render_template(
-        "admin/agency_orders.html", title="All orders", clients=clients
-    )
-    
-@accounts.route("/admin/developers", methods=["GET"])
-@login_required(role="ADMIN")
-def developers():
-    return render_template("admin/developers.html")
-  
   
 @staticmethod
 def find_clients_with_no_orders():

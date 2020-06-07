@@ -4,6 +4,7 @@ from application import db
 from application.orders.models import Order
 from application.auth.models import Account
 from application.orders.forms import OrderForm
+from application.auth import login_required
 
 orders = Blueprint("orders", __name__)
 
@@ -79,3 +80,14 @@ def delete_order(order_id):
     db.session.commit()
     flash("Your order has been deleted!", "success")
     return redirect(url_for("main.home"))
+
+
+@orders.route("/agency_orders", methods=["GET"])
+@login_required(role="ADMIN")
+def agency_orders():
+    # query all orders made by clients
+    clients =  Account.query.filter_by(role_id = 2)
+    print(clients)
+    return render_template(
+        "admin/agency_orders.html", title="All orders", clients=clients
+    )

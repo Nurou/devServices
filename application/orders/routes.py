@@ -18,15 +18,13 @@ def new_order():
             title=form.title.data,
             requirements=form.requirements.data,
             account_id=current_user.id,
-            complete=False
+            complete=False,
         )
         db.session.add(order)
         db.session.commit()
         flash("Your order has been created!", "success")
         return redirect(url_for("orders.client_orders", username=current_user.username))
-    return render_template(
-        "client/create_order.html", form=form, legend="New Order"
-    )
+    return render_template("client/create_order.html", form=form, legend="New Order")
 
 
 @orders.route("/account/<string:username>")
@@ -46,7 +44,6 @@ def client_orders(username):
 @login_required
 def order(order_id):
     order = Order.query.get_or_404(order_id)
-    print(order)
     return render_template("client/order.html", title=order.title, order=order)
 
 
@@ -67,7 +64,10 @@ def update_order(order_id):
         form.title.data = order.title
         form.requirements.data = order.requirements
     return render_template(
-        "client/create_order.html", title="Update Order", form=form, legend="Update Order"
+        "client/create_order.html",
+        title="Update Order",
+        form=form,
+        legend="Update Order",
     )
 
 
@@ -83,12 +83,31 @@ def delete_order(order_id):
     return redirect(url_for("main.home"))
 
 
-@orders.route("/agency_orders", methods=["GET"])
+@orders.route("/admin/agency_orders", methods=["GET"])
 @login_required(role="ADMIN")
 def agency_orders():
-    # query all orders made by clients
-    clients =  Account.query.filter_by(role_id = 2)
-    print(clients)
+    orders = Order.query.all()
+    print(orders)
+    for order in orders:
+        print(order.account)
     return render_template(
-        "admin/agency_orders.html", title="All orders", clients=clients
+        "admin/agency_orders.html", title="All orders", orders=orders
     )
+
+
+@orders.route("/admin/order/<int:order_id>")
+@login_required
+def admin_order(order_id):
+    order = Order.query.get_or_404(order_id)
+    return render_template("admin/order.html", title=order.title, order=order)
+
+
+@orders.route("/admin/order/<int:order_id>/mark_done")
+@login_required
+def mark_done(order_id):
+    order = Order.query.get_or_404(order_id)
+    order.complete = True
+    db.session.add(order)
+    db.session.commit()
+    flash("The order was marked as complete.", "success")
+    return redirect(url_for("accounts.dashboard"))

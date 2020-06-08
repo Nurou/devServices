@@ -1,0 +1,52 @@
+{% extends "admin/layout.html" %} {% block content %}
+<div class="container">
+  <div class="content-section">
+    <form method="POST" action="">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">{{ legend }}</legend>
+        <div class="form-group">
+          {{ form.name.label(class="form-control-label") }} {% if
+          form.name.errors %} {{ form.name(class="form-control form-control-lg
+          is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.name.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.name(class="form-control form-control-lg") }} {%
+          endif %}
+        </div>
+        <div class="form-group">
+          {{ form.experience_level.label(class="form-control-label") }} {% if
+          form.experience_level.errors %} {{
+          form.experience_level(class="form-control form-control-lg is-invalid")
+          }}
+          <div class="invalid-feedback">
+            {% for error in form.experience_level.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.experience_level(class="form-control
+          form-control-lg") }} {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.hourly_cost.label(class="form-control-label") }} {% if
+          form.hourly_cost.errors %} {{ form.hourly_cost(class="form-control
+          form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.hourly_cost.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.hourly_cost(class="form-control form-control-lg")
+          }} {% endif %}
+        </div>
+      </fieldset>
+      <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

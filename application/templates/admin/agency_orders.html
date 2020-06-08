@@ -1,9 +1,28 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container">
   <h1>All orders</h1>
-  {% for client in clients %}
-  <li>{{ client.name }}</li>
-  {% endfor %}
+  <table class="table mt-5">
+    <tr>
+      <th>Order</th>
+      <th>Client</th>
+      <th>Service</th>
+      <th></th>
+    </tr>
+    {% for order in orders%} {% if order.account.name != 'Admin' %}
+    <tr>
+      <th>{{order.title}}</th>
+      <th>{{order.account.email}}</th>
+      <th>iOS</th>
+      <th>
+        <a
+          class="btn btn-outline-secondary btn-sm btn-block mt-1 mb-1"
+          href="{{ url_for('orders.admin_order', order_id=order.id) }}"
+          >View Order</a
+        >
+      </th>
+    </tr>
+    {% endif %} {%endfor%}
+  </table>
 </div>
 
 {% endblock content %}

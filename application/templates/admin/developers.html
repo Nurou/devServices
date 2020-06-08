@@ -1,6 +1,16 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container">
   <h1>Developers</h1>
+  <ul>
+    {% for developer in developers %}
+    <li>
+      {{developer.name}}
+    </li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('developers.new_developer') }}" class="btn btn-primary"
+    >Add Developer</a
+  >
 </div>
 
 {% endblock content %}

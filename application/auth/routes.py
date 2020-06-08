@@ -95,14 +95,14 @@ def admin_credentials():
         "client/admin.html", title="Admin Credentials"
     )
     
-@accounts.route("/dashboard", methods=["GET"])
+@accounts.route("/admin/dashboard", methods=["GET"])
 @login_required(role="ADMIN")
 def dashboard():
     return render_template(
         "admin/dashboard.html", title="Admin Dashboard"
     )
     
-@accounts.route("/clients", methods=["GET"])
+@accounts.route("/admin/clients", methods=["GET"])
 @login_required(role="ADMIN")
 def clients():
     return render_template(

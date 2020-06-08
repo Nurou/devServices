@@ -18,6 +18,7 @@ def new_order():
             title=form.title.data,
             requirements=form.requirements.data,
             account_id=current_user.id,
+            complete=False
         )
         db.session.add(order)
         db.session.commit()

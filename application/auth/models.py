@@ -38,6 +38,21 @@ class Account(Base, UserMixin):
     def roles(self):
       return self.role.name
     
+    @staticmethod
+    def find_clients_with_no_orders():
+      stmt = text("SELECT Account.name, Account.email FROM Account "
+                  "LEFT JOIN \"order\" ON \"order\".account_id = Account.id "
+                  "WHERE (\"order\".complete IS null OR \"order\".complete = False) "
+                  "GROUP BY Account.id "
+                  "HAVING COUNT(\"order\".id) = 0")
+      res = db.engine.execute(stmt)
+
+      response = []
+      for row in res:
+          response.append({"name":row[0], "email":row[1]})
+
+      return response
+      
 
 
 class Role(Base):  
@@ -48,3 +63,5 @@ class Role(Base):
 
     def __repr__(self):
         return f"Role('{self.name}')"
+
+

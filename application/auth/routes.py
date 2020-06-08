@@ -106,15 +106,7 @@ def dashboard():
 @login_required(role="ADMIN")
 def clients():
     return render_template(
-        "admin/clients.html", title="Clients"
+        "admin/clients.html", title="Clients", no_orders=Account.find_clients_with_no_orders()
     )
     
   
-@staticmethod
-def find_clients_with_no_orders():
-    stmt = text("SELECT Account.id, Account.name FROM Account"
-                " LEFT JOIN Order ON Order.account_id = Account.id"
-                " WHERE (Order.complete IS null OR Order.complete = 0)"
-                " GROUP BY Account.id"
-                " HAVING COUNT(Order.id) = 0")
-    res = db.engine.execute(stmt)

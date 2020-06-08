@@ -1,8 +1,8 @@
-# devServices 👔
+# devServices 💻
 
 ## Description
 
-This is an application for a software agency that enables the agency to list their sercives and the clients to make orders. The client is able to choose both the type of service needed, and the developers that they want to work on them.
+A prototype application for a software agency and its clients. It enables the agency to list their available sercives and the clients to make orders.
 
 https://dev-services.herokuapp.com/
 

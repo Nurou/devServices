@@ -6,14 +6,19 @@ from application.auth.models import Account
 
 
 class RegistrationForm(FlaskForm):
-    name = StringField("Name", validators=[DataRequired()])
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    username = StringField(
-        "Username", validators=[DataRequired(), Length(min=3, max=20)]
+    name = StringField("Name", validators=[DataRequired(), Length(min=3, max=30)])
+    email = StringField(
+        "Email", validators=[DataRequired(), Email(), Length(min=8, max=40)]
     )
-    password = PasswordField("Password", validators=[DataRequired()])
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(min=3, max=25)]
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(min=3, max=30)]
+    )
     confirm_password = PasswordField(
-        "Confirm Password", validators=[DataRequired(), EqualTo("password")]
+        "Confirm Password",
+        validators=[DataRequired(), EqualTo("password"), Length(min=3, max=30)],
     )
     submit = SubmitField("Sign Up")
 
@@ -29,8 +34,12 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(min=3, max=25)]
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(min=3, max=30)]
+    )
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
@@ -39,7 +48,9 @@ class UpdateAccountForm(FlaskForm):
     username = StringField(
         "Username", validators=[DataRequired(), Length(min=2, max=20)]
     )
-    email = StringField("Email", validators=[DataRequired(), Email()])
+    email = StringField(
+        "Email", validators=[DataRequired(), Email(), Length(min=8, max=40)]
+    )
     submit = SubmitField("Update")
 
     def validate_username(self, username):

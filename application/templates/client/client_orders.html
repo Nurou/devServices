@@ -2,32 +2,34 @@
 <div class="container">
   <h1 class="mb-3">Orders by {{ client.username }} ({{ orders.total }})</h1>
   {% if orders.total == 0 %}
-    <a href="{{ url_for('orders.new_order', username=current_user.username) }}" class="btn btn-primary">Make Order</a>
+  <a
+    href="{{ url_for('orders.new_order', username=current_user.username) }}"
+    class="btn btn-primary"
+    >Make Order</a
+  >
   {% endif %}
-  {% for order in orders.items %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a
-          class="mr-2"
-          href="{{ url_for('orders.client_orders', username=order.account.username) }}"
-          >{{ order.account.username }}</a
-        >
-        <small class="text-muted"
-          >{{ order.date_created.strftime('%Y-%m-%d') }}</small
-        >
-      </div>
-      <h2>
-        <a
-          class="article-title"
-          href="{{ url_for('orders.order', order_id=order.id) }}"
-          >{{ order.title }}</a
-        >
-      </h2>
-      <p class="article-content">{{ order.requirements }}</p>
-    </div>
-  </article>
-  {% endfor %}
+  <ol class="list-group">
+    {% for order in orders.items %}
+    <li class="list-group-item">
+      <article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+            <p class="text-muted">
+              Order made: {{ order.date_created.strftime('%Y-%m-%d') }}
+            </p>
+          </div>
+          <h3>
+            <a
+              class="text-info""
+              href="{{ url_for('orders.order', order_id=order.id) }}"
+              >{{ order.title }}</a
+            >
+          </h3>
+        </div>
+      </article>
+    </li>
+    {% endfor %}
+  </ol>
 </div>
 
 {% endblock content %}

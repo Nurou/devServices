@@ -18,9 +18,9 @@
             <th>{{ order.date_created.strftime('%Y-%m-%d') }}</th>
             <th>{{ order.service.name}}</th>
             {% if order.complete == True %}
-            <th>Complete</th>
+            <th>Complete ✅</th>
             {% else %}
-            <th>In progress</th>
+            <th>Received 🚧</th>
             {% endif %}
           </tr>
         </table>

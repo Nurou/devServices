@@ -99,3 +99,9 @@ header {
   width: 180px;
   margin-right: auto;
 }
+
+.services {
+  display: grid;
+  border: 1px solid red;
+  grid-auto-flow: row;
+}

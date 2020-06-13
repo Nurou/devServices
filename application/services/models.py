@@ -7,6 +7,7 @@ class Service(Base):
     name = db.Column(db.String(100), nullable=False)
 
     def __init__(self, name):
-      self.name = name
+        self.name = name
+
     def __repr__(self):
-        return f"Service('{self.name}')"
+        return f"{self.name}"

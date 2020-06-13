@@ -3,18 +3,28 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a
-          class="mr-2"
-          href="{{ url_for('orders.client_orders', username=order.account.username) }}"
-          >{{ order.account.username }}</a
-        >
-        <small class="text-muted"
-          >{{ order.date_created.strftime('%Y-%m-%d') }}</small
-        >
         {% if order.account == current_user %}
+        <table class="table mt-5">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Order Title</th>
+              <th scope="col">Ordered</th>
+              <th scope="col">Service</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tr>
+            <th>{{ order.title }}</th>
+            <th>{{ order.date_created.strftime('%Y-%m-%d') }}</th>
+            <th>{{ order.service.name}}</th>
+            {% if order.complete == True %}
+            <th>Complete</th>
+            {% else %}
+            <th>In progress</th>
+            {% endif %}
+          </tr>
+        </table>
         <div class="d-flex flex-column">
-          <h2 class="article-title">{{ order.title }}</h2>
-          <p class="article-content">{{ order.requirements }}</p>
           <div class="d-flex">
             <a
               class="btn btn-secondary btn-sm mt-1 mb-1"
@@ -27,7 +37,7 @@
               data-toggle="modal"
               data-target="#deleteModal"
             >
-              Delete
+              Cancel
             </button>
           </div>
         </div>
@@ -58,14 +68,22 @@
           </button>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            data-dismiss="modal"
+          >
             Close
           </button>
           <form
             action="{{ url_for('orders.delete_order', order_id=order.id) }}"
             method="POST"
           >
-            <input class="btn btn-danger" type="submit" value="Delete" />
+            <input
+              class="btn btn-danger btn-sm w-100"
+              type="submit"
+              value="Cancel"
+            />
           </form>
         </div>
       </div>

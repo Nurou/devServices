@@ -5,19 +5,29 @@ from application.orders.models import Order
 from application.auth.models import Account
 from application.orders.forms import OrderForm
 from application.auth import login_required
+from application.services.models import Service
 
 orders = Blueprint("orders", __name__)
+
+
+def get_service(name):
+    print(name)
+    print(Service.query.filter_by(name=name).first())
+    return Service.query.filter_by(name=name).first().id
 
 
 @orders.route("/orders/new", methods=["GET", "POST"])
 @login_required
 def new_order():
     form = OrderForm()
+    # services = Service.query.all()
     if form.validate_on_submit():
+        print(form.service.data)
         order = Order(
             title=form.title.data,
             requirements=form.requirements.data,
             account_id=current_user.id,
+            service_id=form.service.data.id,
             complete=False,
         )
         db.session.add(order)
@@ -80,7 +90,7 @@ def delete_order(order_id):
     db.session.delete(order)
     db.session.commit()
     flash("Your order has been deleted!", "success")
-    return redirect(url_for("main.home"))
+    return redirect(url_for("orders.client_orders", username=current_user.username))
 
 
 @orders.route("/admin/agency_orders", methods=["GET"])

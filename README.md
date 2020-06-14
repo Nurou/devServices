@@ -2,9 +2,9 @@
 
 ## Description
 
-A prototype application for a software agency and its clients. It enables the agency to list their available sercives and the clients to make orders.
+A prototype application for a software agency and its registered clients. It provides functionality for the agency to manage their services and for clients to manage their orders.
 
-https://dev-services.herokuapp.com/
+Link in the description ⬆
 
 ## Documentation
 

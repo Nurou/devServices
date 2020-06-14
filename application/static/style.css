@@ -1,13 +1,16 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&family=Roboto+Mono&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   list-style-type: none;
+  font-family: 'Roboto Mono', monospace;
 }
 
 body {
   background: #f4f4f4;
-  font-family: Arial, Helvetica, sans-serif;
   color: #333;
   line-height: 1.6;
 }
@@ -70,7 +73,6 @@ textarea {
 .nav__links li,
 .nav__links a,
 .nav__links button {
-  font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   font-size: 17px;
   color: #edf0f1;

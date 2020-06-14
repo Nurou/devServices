@@ -35,7 +35,7 @@ def new_order():
         db.session.commit()
         flash("Your order has been created!", "success")
         return redirect(url_for("orders.client_orders", username=current_user.username))
-    return render_template("client/create_order.html", form=form, legend="New Order")
+    return render_template("client/create_order.html", form=form, legend="New Order", title="New Order")
 
 
 @orders.route("/account/<string:username>")

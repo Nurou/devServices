@@ -1,12 +1,13 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container">
-  <h2 class="pt-3">Developers Currently Working:</h2>
+  <h2 class="pt-3">Developers</h2>
   <table class="table mt-5">
     <tr>
       <th>Developer</th>
       <th>Cost (€/hr)</th>
       <th>Experience Level</th>
       <th>Skill Set</th>
+      <th>Assigned Orders</th>
     </tr>
     {% for developer in developers %}
     <tr>

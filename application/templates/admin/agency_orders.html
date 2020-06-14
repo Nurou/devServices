@@ -12,10 +12,10 @@
     <tr>
       <th>{{order.title}}</th>
       <th>{{order.account.email}}</th>
-      <th>iOS</th>
+      <th>{{order.service.name}}</th>
       <th>
         <a
-          class="btn btn-outline-secondary btn-sm btn-block mt-1 mb-1 text-center"
+          class="btn btn-outline-secondary btn-sm btn-block mt-1 mb-1 text-center w-100"
           href="{{ url_for('orders.admin_order', order_id=order.id) }}"
           >View Order</a
         >

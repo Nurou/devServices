@@ -1,6 +1,6 @@
 {% extends "client/layout.html" %} {% block content %}
 <div class="container">
-  <h1 class="mb-3">Orders by you ({{ client.username }}) [{{ orders.total }]</h1>
+  <h1 class="mb-3">Orders by you ({{ client.username }}) [{{ orders.total }}]</h1>
   {% if orders.total == 0 %}
   <a
     href="{{ url_for('orders.new_order', username=current_user.username) }}"

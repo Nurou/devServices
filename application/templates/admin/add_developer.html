@@ -17,6 +17,17 @@
           {% else %} {{ form.name(class="form-control form-control-lg") }} {%
           endif %}
         </div>
+        <div class="checkbox">
+          {{ form.services.label(class="form-control-label") }} {% if
+          form.services.errors %} {{ form.services(class="form-control
+          form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.services.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.services(class="multiselect") }} {% endif %}
+        </div>
         <div class="form-group">
           {{ form.experience_level.label(class="form-control-label") }} {% if
           form.experience_level.errors %} {{
@@ -49,4 +60,22 @@
     </form>
   </div>
 </div>
+
+<script>
+  document.getElementById('test').addEventListener('change', function (e) {
+    console.log(this.value);
+  });
+  // (function (values, sel) {
+  //   var sel = document.querySelector('select');
+  //   values = new Array(sel.length);
+
+  //   sel.addEventListener('click', function (e) {
+  //     console.log(sel);
+  //     values[e.target.index] = !values[e.target.index];
+  //     for (var i = 0; i < values.length; ++i) {
+  //       sel.options[i].selected = values[i];
+  //     }
+  //   });
+  // })();
+</script>
 {% endblock content %}

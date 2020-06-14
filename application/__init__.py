@@ -53,7 +53,7 @@ def create_app(config_test=Config_TEST, config_prod=Config_PROD):
         with app.app_context():
           from application.auth.models import Role, Account
           from application.orders.models import Order, assigned_developers
-          from application.developers.models import Developer  
+          from application.developers.models import Developer, developer_skills 
           from application.services.models import Service  
           # initialise tables
           db.create_all()

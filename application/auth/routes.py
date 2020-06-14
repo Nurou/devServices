@@ -89,11 +89,16 @@ def account():
         "client/account.html", title="Account", form=form, delete_form=delete_form, name=current_user.username
     )
     
-@accounts.route("/admin/credentials", methods=["GET"])
+@accounts.route("/admin_credentials", methods=["GET"])
 def admin_credentials():
     return render_template(
         "client/admin.html", title="Admin Credentials"
     )
+    
+@accounts.route("/admin", methods=["GET"])
+@login_required(role="ADMIN")
+def admin_home():
+    return redirect(url_for("accounts.dashboard"))
     
 @accounts.route("/admin/dashboard", methods=["GET"])
 @login_required(role="ADMIN")

@@ -26,9 +26,10 @@ def new_developer():
             experience_level=form.experience_level.data,
             hourly_cost=form.hourly_cost.data,
         )
+        for service in form.services.data:
+            developer.services.append(service)
         db.session.add(developer)
         db.session.commit()
-        print(developer)
         flash(f"Developer {developer.name} has been added", "success")
         return redirect(url_for("developers.view_developers"))
     return render_template(

@@ -1,13 +1,32 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container">
   <h1>Developers</h1>
-  <ul>
+  <table class="table mt-5">
+    <tr>
+      <th>Developer</th>
+      <th>Cost (€/hr)</th>
+      <th>Experience Level</th>
+      <th>Skill Set</th>
+    </tr>
     {% for developer in developers %}
-    <li>
-      {{developer.name}}
-    </li>
+    <tr>
+      <td>{{developer.name}}</td>
+      <td>{{developer.hourly_cost}}</td>
+      {% if developer.experience_level == 1 %}
+      <td>Junior</td>
+      {% elif developer.experience_level == 2 %}
+      <td>Mid</td>
+      {% else %}
+      <td>Senior</td>
+      {% endif%}
+      <td>
+        {% for service in developer.services %}
+        <span><strong>[{{service.name}}] </strong></span> {% endfor %}
+      </td>
+    </tr>
     {% endfor %}
-  </ul>
+  </table>
+
   <a href="{{ url_for('developers.new_developer') }}" class="btn btn-primary"
     >Add Developer</a
   >

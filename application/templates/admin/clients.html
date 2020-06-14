@@ -1,19 +1,20 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container d-flex p-2 flex-column">
-  <h1 class="mx-auto w-3 pb-5">Clients With No Orders</h1>
+  <h1 class="mx-auto w-3 pb-5">Clients</h1>
+
   <table class="table mt-5">
     <tr>
       <th>Name</th>
       <th>Email</th>
+      <th># of Orders</th>
     </tr>
-    {% for client in no_orders%}
-    {% if client.name != 'Admin' %}
-      <tr>
-        <th>{{client.name}}</th>
-        <th>{{client.email}}</th>
-      </tr>
-      {% endif %}
-    {%endfor%}
+    {% for client in with_orders%} {% if client.name != 'Admin' %}
+    <tr>
+      <th>{{client.name}}</th>
+      <th>{{client.email}}</th>
+      <th>{{client.orders}}</th>
+    </tr>
+    {% endif %} {%endfor%}
   </table>
 </div>
 {% endblock content %}

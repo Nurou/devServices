@@ -9,6 +9,7 @@ from sqlalchemy.sql import text
 def load_user(account_id):
     return Account.query.get(int(account_id))
 
+
 # user mixin adds the properties that belong to it to our model class
 # includes is_active, is_authenticated ...
 class Account(Base, UserMixin):
@@ -36,26 +37,50 @@ class Account(Base, UserMixin):
         self.role = role
 
     def roles(self):
-      return self.role.name
-    
+        return self.role.name
+
     @staticmethod
     def find_clients_with_no_orders():
-      stmt = text("SELECT Account.name, Account.email FROM Account "
-                  "LEFT JOIN \"order\" ON \"order\".account_id = Account.id "
-                  "WHERE (\"order\".complete IS null OR \"order\".complete = False) "
-                  "GROUP BY Account.id "
-                  "HAVING COUNT(\"order\".id) = 0")
-      res = db.engine.execute(stmt)
+        stmt = text(
+            "SELECT Account.name, Account.email FROM Account "
+            'LEFT JOIN \"order\" ON \"order\".account_id = Account.id '
+            'WHERE (\"order\".complete IS null OR \"order\".complete = False) '
+            "GROUP BY Account.id "
+            'HAVING COUNT(\"order\".id) = 0'
+        )
+        # stmt = text(
+        #     "SELECT a.name, a.email FROM Account a "
+        #     'LEFT JOIN "order" o ON o.account_id = Account.id '
+        #     "WHERE (o.complete IS null OR o.complete = False) "
+        #     "GROUP BY a.id "
+        #     "HAVING COUNT(o.id) = 0"
+        # )
+        res = db.engine.execute(stmt)
 
-      response = []
-      for row in res:
-          response.append({"name":row[0], "email":row[1]})
+        response = []
+        for row in res:
+            response.append({"name": row[0], "email": row[1]})
 
-      return response
-      
+        return response
+
+    @staticmethod
+    def find_clients_and_orders():
+        stmt = text(
+            "SELECT name AS client_name, email, (select count(*) from \"order\" where \"order\".account_id = a.id) AS total_orders "
+            "FROM account a "
+            "WHERE (select name from role r where r.id=a.role_id) LIKE :role_match "
+            "ORDER BY a.name"
+        )
+        res = db.engine.execute(stmt, role_match="CLIENT")
+
+        response = []
+        for row in res:
+            response.append({"name": row[0], "email": row[1], "orders": row[2]})
+
+        return response
 
 
-class Role(Base):  
+class Role(Base):
     name = db.Column(db.String(40), unique=True, nullable=False)
 
     def __init__(self, name):
@@ -63,5 +88,3 @@ class Role(Base):
 
     def __repr__(self):
         return f"Role('{self.name}')"
-
-

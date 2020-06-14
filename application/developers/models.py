@@ -36,9 +36,9 @@ class Developer(Base):
             "SELECT d.name "
             "FROM developer d "
             "LEFT JOIN developer_skills ds ON d.id = ds.developer_id "
-            "WHERE service_id = 21 "
+            "WHERE service_id = :service_id AND (SELECT count(order_id) FROM order_developers) < :max_orders "
             "GROUP BY d.name"
-        ).params(service_id=service_id)
+        ).params(service_id=service_id, max_orders=3)
         res = db.engine.execute(stmt)
 
         response = []
@@ -46,4 +46,3 @@ class Developer(Base):
             response.append({"name": row[0]})
 
         return response
-

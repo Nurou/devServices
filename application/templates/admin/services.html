@@ -1,7 +1,7 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container">
-  <h1 class="text-center">Services</h1>
-  <div class="services">
+  <h1 class="text-center  pb-5">Services</h1>
+  <div class="services pb-5">
     {% for service in services%}
     <div class="pb-5"> 
         <span class="text-center">
@@ -11,7 +11,7 @@
           action="{{ url_for('services.delete_service', service_id=service.id) }}"
           method="POST"
         >
-          <input class="btn btn-danger btn-sm w-30" type="submit" value="Delete" />
+          <input class="btn btn-danger btn-sm w-4" type="submit" value="Remove" />
         </form>
      </div>
       {% endfor%}

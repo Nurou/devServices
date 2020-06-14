@@ -5,6 +5,7 @@ from application.auth import login_required
 from application.orders.models import Order
 from application.developers.forms import AddDeveloperForm
 from application.developers.models import Developer
+from application.services.models import Service
 
 developers = Blueprint("developers", __name__)
 
@@ -20,14 +21,27 @@ def view_developers():
 @login_required
 def new_developer():
     form = AddDeveloperForm()
+
+    form.services.choices = [(s.id, s.name) for s in Service.query.all()]
+
     if form.validate_on_submit():
+        service_record = Service.query.all()
+        # need a list to hold our choices
+        accepted = []
+        # looping through the choices, we check the choice ID against what was passed in the form
+        for service in service_record:
+            # when we find a match, we then append the Choice object to our list
+            if service.id in form.services.data:
+                accepted.append(service)
+
         developer = Developer(
             name=form.name.data,
             experience_level=form.experience_level.data,
             hourly_cost=form.hourly_cost.data,
         )
-        for service in form.services.data:
-            developer.services.append(service)
+        # for service in form.services.data:
+        #     developer.services.append(service)
+        developer.services = accepted
         db.session.add(developer)
         db.session.commit()
         flash(f"Developer {developer.name} has been added", "success")

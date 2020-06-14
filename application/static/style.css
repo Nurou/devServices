@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 body {
@@ -102,6 +103,8 @@ header {
 
 .services {
   display: grid;
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  grid-template-columns: repeat(3, 15vw);
+  grid-template-rows: repeat(3, auto);
   grid-auto-flow: row;
 }

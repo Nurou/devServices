@@ -111,7 +111,7 @@ def dashboard():
 @login_required(role="ADMIN")
 def clients():
     return render_template(
-        "admin/clients.html", title="Clients", no_orders=Account.find_clients_with_no_orders()
+        "admin/clients.html", title="Clients", no_orders=Account.find_clients_with_no_orders(), with_orders=Account.find_clients_and_orders()
     )
     
   

@@ -1,5 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, SelectField
+from wtforms import (
+    StringField,
+    SubmitField,
+    IntegerField,
+    SelectField,
+    SelectMultipleField,
+    widgets,
+)
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from application.services.models import Service
@@ -7,6 +14,11 @@ from application.services.models import Service
 
 def services_query():
     return Service.query.all()
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 
 class AddDeveloperForm(FlaskForm):
@@ -18,11 +30,6 @@ class AddDeveloperForm(FlaskForm):
         validators=[DataRequired()],
         coerce=int,
     )
-    services = QuerySelectMultipleField(
-        default=["1", "2"],
-        query_factory=services_query,
-        get_label="name",
-        allow_blank=False,
-    )
+    services = MultiCheckboxField("Services", coerce=int)
     hourly_cost = IntegerField("Cost", validators=[DataRequired()])
     submit = SubmitField("Add Developer")

@@ -6,9 +6,9 @@
       <fieldset class="form-group">
         <legend class="border-bottom mb-4">{{ legend }}</legend>
         <div class="form-group">
-          {{ form.name.label(class="form-control-label") }} {% if
-          form.name.errors %} {{ form.name(class="form-control form-control-lg
-          is-invalid") }}
+          {{ form.name.label(class="form-control-label font-weight-bold") }} {%
+          if form.name.errors %} {{ form.name(class="form-control
+          form-control-lg is-invalid") }}
           <div class="invalid-feedback">
             {% for error in form.name.errors %}
             <span>{{ error }}</span>
@@ -18,8 +18,8 @@
           endif %}
         </div>
         <div class="checkbox">
-          {{ form.services.label(class="form-control-label") }} {% if
-          form.services.errors %} {{ form.services(class="form-control
+          <p class="pb-1 font-weight-bold">Skills</p>
+          {% if form.services.errors %} {{ form.services(class="form-control
           form-control-lg is-invalid") }}
           <div class="invalid-feedback">
             {% for error in form.services.errors %}
@@ -29,8 +29,8 @@
           {% else %} {{ form.services(class="multiselect") }} {% endif %}
         </div>
         <div class="form-group">
-          {{ form.experience_level.label(class="form-control-label") }} {% if
-          form.experience_level.errors %} {{
+          {{ form.experience_level.label(class="form-control-label
+          font-weight-bold") }} {% if form.experience_level.errors %} {{
           form.experience_level(class="form-control form-control-lg is-invalid")
           }}
           <div class="invalid-feedback">
@@ -42,9 +42,9 @@
           form-control-lg") }} {% endif %}
         </div>
         <div class="form-group">
-          {{ form.hourly_cost.label(class="form-control-label") }} {% if
-          form.hourly_cost.errors %} {{ form.hourly_cost(class="form-control
-          form-control-lg is-invalid") }}
+          {{ form.hourly_cost.label(class="form-control-label font-weight-bold")
+          }} (€/hr){% if form.hourly_cost.errors %} {{
+          form.hourly_cost(class="form-control form-control-lg is-invalid") }}
           <div class="invalid-feedback">
             {% for error in form.hourly_cost.errors %}
             <span>{{ error }}</span>

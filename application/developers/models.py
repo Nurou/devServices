@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from sqlalchemy.sql import text
 
 developer_skills = db.Table(
     "developer_skills",
@@ -28,3 +29,21 @@ class Developer(Base):
         return (
             f"Developer('{self.name}', '{self.experience_level}', '{self.hourly_cost}')"
         )
+
+    @staticmethod
+    def find_developers_with_matching_skills(service_id):
+        stmt = text(
+            "SELECT d.name "
+            "FROM developer d "
+            "LEFT JOIN developer_skills ds ON d.id = ds.developer_id "
+            "WHERE service_id = 21 "
+            "GROUP BY d.name"
+        ).params(service_id=service_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"name": row[0]})
+
+        return response
+

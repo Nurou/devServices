@@ -6,6 +6,7 @@ from application.auth.models import Account
 from application.orders.forms import OrderForm
 from application.auth import login_required
 from application.services.models import Service
+from application.developers.models import Developer
 
 orders = Blueprint("orders", __name__)
 
@@ -105,19 +106,27 @@ def agency_orders():
     )
 
 
-@orders.route("/admin/order/<int:order_id>")
-@login_required
+@orders.route("/admin/order/<int:order_id>", methods=["GET"])
+@login_required(role="ADMIN")
 def admin_order(order_id):
     order = Order.query.get_or_404(order_id)
-    return render_template("admin/order.html", title=order.title, order=order)
+    developers_available = Developer.find_developers_with_matching_skills(
+        order.service_id
+    )
+    return render_template(
+        "admin/order.html",
+        title=order.title,
+        order=order,
+        developers_available=developers_available,
+    )
 
 
-@orders.route("/admin/order/<int:order_id>/mark_done")
-@login_required
+@orders.route("/admin/order/<int:order_id>/mark_done", methods=["POST"])
+@login_required(role="ADMIN")
 def mark_done(order_id):
     order = Order.query.get_or_404(order_id)
     order.complete = True
     db.session.add(order)
     db.session.commit()
     flash("The order was marked as complete.", "success")
-    return redirect(url_for("accounts.dashboard"))
+    return render_template("admin/order.html", title=order.title, order=order)

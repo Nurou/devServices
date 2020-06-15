@@ -14,3 +14,4 @@
 - [ ] Assign developers to orders
 - [x] Modify/update information pertaining to the agency, including services and developers for the the above-mentioned reason
 - [x] Keep track of all orders made by clients in order to draw summaries from them and relay that information to upper management.
+

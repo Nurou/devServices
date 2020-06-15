@@ -24,7 +24,7 @@ class Account(Base, UserMixin):
      """
     role = db.relationship("Role", backref="account", lazy=True)
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable=True)
-    orders = db.relationship("Order", backref="account", lazy=True)
+    orders = db.relationship("Order", backref="account", cascade="delete", lazy=True)
 
     def __repr__(self):
         return f"Account('{self.name}','{self.username}', '{self.email}', '{self.password}', '{self.role}')"

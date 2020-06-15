@@ -6,7 +6,7 @@ from application.services.models import Service
 
 
 def service_query():
-    return Service.query.all()
+    return Service.query.filter().order_by(Service.name)
 
 
 class OrderForm(FlaskForm):

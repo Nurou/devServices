@@ -6,9 +6,10 @@ from wtforms import (
     SelectMultipleField,
     widgets,
 )
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from application.services.models import Service
+from application.developers.models import Developer
 
 
 def service_query():
@@ -34,3 +35,10 @@ class OrderForm(FlaskForm):
 class AssignDevsToOrderForm(FlaskForm):
     developers = MultiCheckboxField("Developers", coerce=int)
     submit = SubmitField("Assign Selected")
+
+    def validate_assignment(self, developers):
+        for d in developers:
+            if Developer.is_developer_available(d.id) == False:
+                raise ValidationError(
+                    "One of the developers cannot be assigned to the order. They have either already been assigned to the order, or are too busy."
+                )

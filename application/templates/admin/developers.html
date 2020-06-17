@@ -24,6 +24,10 @@
         {% for service in developer.services %}
         <span><strong>[{{service.name}}] </strong></span> {% endfor %}
       </td>
+      <td>
+        {% for order in developer.orders %}
+        <span><strong>[{{order.title}}] </strong></span> {% endfor %}
+      </td>
     </tr>
     {% endfor %}
   </table>

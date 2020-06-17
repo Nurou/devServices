@@ -112,13 +112,16 @@ def agency_orders():
 @login_required(role="ADMIN")
 def admin_order(order_id):
     order = Order.query.get_or_404(order_id)
-    developers_available = Developer.find_developers_with_matching_skills(
+    developers_available = Developer.find_developers_with_skills_and_availability(
         order.service_id
     )
     form = AssignDevsToOrderForm()
 
     form.developers.choices = [
-        (d.id, d.name) for d in Developer.query.all() if d.name in developers_available
+        (d.id, d.name)
+        for d in Developer.query.all()
+        if d.name in developers_available
+        and (Developer.is_developer_already_assigned(order_id, d.id) == False)
     ]
 
     if form.validate_on_submit():

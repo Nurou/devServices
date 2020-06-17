@@ -27,25 +27,23 @@ def new_developer():
     if form.validate_on_submit():
         service_record = Service.query.all()
         # need a list to hold our choices
-        accepted = []
+        selected = []
         # looping through the choices, we check the choice ID against what was passed in the form
         for service in service_record:
-            # when we find a match, we then append the Choice object to our list
+            # when we find a match, we then append the object to our list
             if service.id in form.services.data:
-                accepted.append(service)
-
+                selected.append(service)
         developer = Developer(
             name=form.name.data,
             experience_level=form.experience_level.data,
             hourly_cost=form.hourly_cost.data,
         )
-        # for service in form.services.data:
-        #     developer.services.append(service)
-        developer.services = accepted
+        developer.services = selected
         db.session.add(developer)
         db.session.commit()
         flash(f"Developer {developer.name} has been added", "success")
         return redirect(url_for("developers.view_developers"))
+
     return render_template(
         "/admin/add_developer.html", form=form, legend="New Developer",
     )

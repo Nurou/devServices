@@ -9,6 +9,7 @@
             <th scope="col">Order Title</th>
             <th scope="col">Ordered</th>
             <th scope="col">Service</th>
+            <th scope="col">Developers Assigned</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -17,6 +18,13 @@
           <th>{{ order.title }}</th>
           <th>{{ order.date_created.strftime('%Y-%m-%d') }}</th>
           <th>{{ order.service.name }}</th>
+          <th>
+            <ul>
+              {% for developer in order.developers%}
+              <li>{{developer.name}}</li>
+              {%endfor%}
+            </ul>
+          </th>
           {% if order.complete == True %}
           <th>Complete ✔</th>
           {% else %}
@@ -34,13 +42,27 @@
       {% if order.complete == False %}
       <div class="container">
         <hr />
-        <h2 class="py-5">List of Developers Available for the Job:</h2>
-        {% for developer in developers_available%} {{ developer.name }} {%
-        endfor %}
-        <div class="d-flex flex-column pt-5">
-            <a class="btn btn-secondary btn-sm mt-1 mb-1 py-3" href="#"
-              >Assign Developers</a
-            >
+        <h2 class="pt-5">List of Developers Available for the Job:</h2>
+        <div class="d-flex flex-column">
+          <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+              <div class="form-group">
+                {% if form.developers.errors %} {{
+                form.developers(class="form-control form-control-lg is-invalid")
+                }}
+                <div class="invalid-feedback">
+                  {% for error in form.developers.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                {% else %} {{ form.developers(class="") }} {% endif %}
+              </div>
+            </fieldset>
+            <div class="form-group">
+              {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+          </form>
         </div>
       </div>
       {%endif%}

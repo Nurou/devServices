@@ -43,6 +43,8 @@ class Developer(Base):
 
         response = []
         for row in res:
-            response.append({"name": row[0]})
+            response.append(row[0])
+
+        # print(res)
 
         return response

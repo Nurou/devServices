@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from application import db
 from application.orders.models import Order
 from application.auth.models import Account
-from application.orders.forms import OrderForm
+from application.orders.forms import OrderForm, AssignDevsToOrderForm
 from application.auth import login_required
 from application.services.models import Service
 from application.developers.models import Developer
@@ -35,7 +35,9 @@ def new_order():
         db.session.commit()
         flash("Your order has been created!", "success")
         return redirect(url_for("orders.client_orders", username=current_user.username))
-    return render_template("client/create_order.html", form=form, legend="New Order", title="New Order")
+    return render_template(
+        "client/create_order.html", form=form, legend="New Order", title="New Order"
+    )
 
 
 @orders.route("/account/<string:username>")
@@ -106,18 +108,33 @@ def agency_orders():
     )
 
 
-@orders.route("/admin/order/<int:order_id>", methods=["GET"])
+@orders.route("/admin/order/<int:order_id>", methods=["GET", "POST"])
 @login_required(role="ADMIN")
 def admin_order(order_id):
     order = Order.query.get_or_404(order_id)
     developers_available = Developer.find_developers_with_matching_skills(
         order.service_id
     )
+    form = AssignDevsToOrderForm()
+
+    form.developers.choices = [
+        (d.id, d.name) for d in Developer.query.all() if d.name in developers_available
+    ]
+
+    if form.validate_on_submit():
+        developer_record = Developer.query.all()
+        # need a list to hold our choices
+        assigned = []
+        # looping through the choices, we check the choice ID against what was passed in the form
+        for developer in developer_record:
+            # when we find a match, we then append the object to our list
+            if developer.id in form.developers.data:
+                assigned.append(developer)
+        order.developers = assigned
+        db.session.add(order)
+        db.session.commit()
     return render_template(
-        "admin/order.html",
-        title=order.title,
-        order=order,
-        developers_available=developers_available,
+        "admin/order.html", title=order.title, order=order, form=form,
     )
 
 

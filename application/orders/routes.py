@@ -115,14 +115,26 @@ def admin_order(order_id):
     developers_available = Developer.find_developers_with_skills_and_availability(
         order.service_id
     )
+    
+    print("**********************************")
+    print(developers_available)
+    print("**********************************")
+    
     form = AssignDevsToOrderForm()
 
     form.developers.choices = [
         (d.id, d.name)
         for d in Developer.query.all()
         if d.name in developers_available
-        and (Developer.is_developer_already_assigned(order_id, d.id) == False)
+        # and (Developer.is_developer_already_assigned(order_id, d.id) == True)
     ]
+    
+    print("**********************************")
+    print("AVAILABLE:")
+    print(form.developers.choices)
+    print("**********************************")
+    
+
 
     if form.validate_on_submit():
         developer_record = Developer.query.all()

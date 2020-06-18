@@ -69,7 +69,6 @@ class Developer(Base):
         ).params(developer_id=developer_id)
         res = db.engine.execute(stmt)
 
-        print(res)
         if res < max_orders:
             return True
         return False
@@ -80,6 +79,7 @@ class Developer(Base):
             "SELECT order_id, developer_id FROM order_developers "
             "WHERE developer_id = :developer_id AND order_id = :order_id "
         ).params(developer_id=developer_id, order_id=order_id)
+        
         res = db.engine.execute(stmt)
 
         if not res:

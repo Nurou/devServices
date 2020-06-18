@@ -6,6 +6,10 @@ Below is a list of some of the SQL statements for the creation of the database t
 - [find_clients_with_no_orders](https://github.com/Nurou/devServices/blob/3fe4195d88a25041c71be7141d348e4f1d5163ab/application/auth/models.py#L42-L64)
 - [find_clients_and_orders](https://github.com/Nurou/devServices/blob/3fe4195d88a25041c71be7141d348e4f1d5163ab/application/auth/models.py#L66-L80)
 - [find_developers_with_matching_skills](https://github.com/Nurou/devServices/blob/3fe4195d88a25041c71be7141d348e4f1d5163ab/application/developers/models.py#L33-L48)
+- [find_developers_with_skills_and_availability](https://github.com/Nurou/devServices/blob/2fea7a5279e7118473c341adad2fb8f4aeed92cb/application/developers/models.py#L48-L62)
+- [is_developer_available](https://github.com/Nurou/devServices/blob/2fea7a5279e7118473c341adad2fb8f4aeed92cb/application/developers/models.py#L65-L75)
+- [is_developer_already_assigned](https://github.com/Nurou/devServices/blob/2fea7a5279e7118473c341adad2fb8f4aeed92cb/application/developers/models.py#L78-L88)
+- [get_services_by_demand](https://github.com/Nurou/devServices/blob/2fea7a5279e7118473c341adad2fb8f4aeed92cb/application/services/models.py#L15-L30)
 
 ---
 

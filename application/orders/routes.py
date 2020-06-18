@@ -116,9 +116,7 @@ def admin_order(order_id):
         order.service_id
     )
     
-    print("**********************************")
-    print(developers_available)
-    print("**********************************")
+
     
     form = AssignDevsToOrderForm()
 
@@ -128,12 +126,7 @@ def admin_order(order_id):
         if d.name in developers_available
         # and (Developer.is_developer_already_assigned(order_id, d.id) == True)
     ]
-    
-    print("**********************************")
-    print("AVAILABLE:")
-    print(form.developers.choices)
-    print("**********************************")
-    
+
 
 
     if form.validate_on_submit():

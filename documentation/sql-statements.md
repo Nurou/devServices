@@ -159,11 +159,11 @@ WHERE role.id = %(param_1)s
 SELECT Account.name,
        Account.email
 FROM Account
-LEFT JOIN "order" ON "order".account_id = Account.id
-WHERE ("order".complete IS NULL
-       OR "order".complete = FALSE)
+LEFT JOIN \"order\" ON \"order\".account_id = Account.id
+WHERE (\"order\".complete IS NULL
+       OR \"order\".complete = FALSE)
 GROUP BY Account.id
-HAVING COUNT("order".id) = 0
+HAVING COUNT(\"order\".id) = 0
 
 ```
 

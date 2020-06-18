@@ -1,13 +1,16 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container ">
   <h1 class="text-center  pb-5">Services</h1>
-  <h2>These are the services currently being offered: </h2>
+  <h2>Our Services & Demand </h2>
   <br/>
-  <div class="services pb-5">
+  <div class="services pb-5 w-100">
     {% for service in services%}
-    <div class="pb-5"> 
-        <span class="text-center">
+    <div> 
+        <span class="text-center font-weight-bold">
           {{service.name}}
+        </span>
+        <span class="text-center">
+          [Orders:{{service.orders}}]
         </span>
         <form
           action="{{ url_for('services.delete_service', service_id=service.id) }}"
@@ -19,7 +22,7 @@
       {% endfor%}
     </div>
     <a
-      class="btn btn-lg btn-primary mx-auto"
+      class="btn btn-lg btn-primary mx-auto mb-4"
       href="{{ url_for('services.new_service') }}"
       >Add service</a
     >

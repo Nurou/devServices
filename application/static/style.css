@@ -105,8 +105,9 @@ header {
 
 .services {
   display: grid;
-  /* border: 1px solid red; */
-  grid-template-columns: repeat(3, 15vw);
-  grid-template-rows: repeat(3, auto);
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(2, 20vh);
   grid-auto-flow: row;
 }

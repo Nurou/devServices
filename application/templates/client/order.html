@@ -41,9 +41,27 @@
             </button>
           </div>
         </div>
-        {% endif %}
-      </div>
-    </div>
+        {% endif %} 
+        
+        {% if order.complete == False and order.developers %}
+        <h2 class="pt-4">
+          The Engineers working on your order:
+        </h2>
+
+        {% for developer in order.developers%}
+
+        <div class="card px-4  m-3">
+          <div class="card-body d-flex justify-content-between">
+            <div class="card-title">{{developer.name}}</div>
+            <div class="d-flex flex-end">
+              <div class="card-subtitle mr-3">{{developer.experience()}}</div>
+              <div class="card-subtitle block px-2">
+                {{developer.costInEuros()}}
+              </div>
+          </div>
+        </div>
+        </div>
+        {%endfor%} {%endif%}
   </article>
   <!-- Modal -->
   <div

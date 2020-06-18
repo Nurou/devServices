@@ -12,7 +12,7 @@ services = Blueprint("services", __name__)
 @services.route("/admin/services", methods=["GET"])
 @login_required(role="ADMIN")
 def view_services():
-    services = Service.query.all()
+    services = Service.get_services_by_demand()
     return render_template("admin/services.html", services=services)
 
 

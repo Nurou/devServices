@@ -1,8 +1,8 @@
 {% extends "admin/layout.html" %} {% block content %}
 <div class="container d-flex p-2 flex-column">
-  <h2 class="pb-5">Our Current Clients</h2>
+  <h2 class="pb-5 mt-3">Our Current Clients</h2>
 
-  <table class="table pt-2">
+  <table class="table mt-3">
     <tr>
       <th>Name</th>
       <th>Email</th>
@@ -16,5 +16,16 @@
     </tr>
     {% endif %} {%endfor%}
   </table>
+
+  <h3 class="mt-5">Accounts With No Orders</h3>
+  <ul>
+    {%for account in no_orders%}
+    <li class="font-weight-bold">
+      <a href="mailto:{{account.email}}" class="btn btn-sm"
+        >{{account.email}}</a
+      >
+      {%endfor%}
+    </li>
+  </ul>
 </div>
 {% endblock content %}

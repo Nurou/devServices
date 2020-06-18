@@ -33,6 +33,17 @@ class Developer(Base):
             f"Developer('{self.name}', '{self.experience_level}', '{self.hourly_cost}')"
         )
 
+    def experience(self):
+        if self.experience_level == 1:
+            return "Junior"
+        if self.experience_level == 2:
+            return "Mid"
+        if self.experience_level == 3:
+            return "Senior"
+
+    def costInEuros(self):
+        return f"{self.hourly_cost} €/hr"
+
     @staticmethod
     def find_developers_with_skills_and_availability(service_id):
         stmt = text(

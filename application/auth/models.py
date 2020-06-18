@@ -44,17 +44,10 @@ class Account(Base, UserMixin):
         stmt = text(
             "SELECT Account.name, Account.email FROM Account "
             'LEFT JOIN \"order\" ON \"order\".account_id = Account.id '
-            'WHERE (\"order\".complete IS null OR \"order\".complete = False) '
             "GROUP BY Account.id "
             'HAVING COUNT(\"order\".id) = 0'
         )
-        # stmt = text(
-        #     "SELECT a.name, a.email FROM Account a "
-        #     'LEFT JOIN "order" o ON o.account_id = Account.id '
-        #     "WHERE (o.complete IS null OR o.complete = False) "
-        #     "GROUP BY a.id "
-        #     "HAVING COUNT(o.id) = 0"
-        # )
+
         res = db.engine.execute(stmt)
 
         response = []
@@ -66,7 +59,7 @@ class Account(Base, UserMixin):
     @staticmethod
     def find_clients_and_orders():
         stmt = text(
-            "SELECT name AS client_name, email, (select count(*) from \"order\" where \"order\".account_id = a.id) AS total_orders "
+            'SELECT name AS client_name, email, (select count(*) from \"order\" where \"order\".account_id = a.id) AS total_orders '
             "FROM account a "
             "WHERE (select name from role r where r.id=a.role_id) LIKE :role_match "
             "ORDER BY a.name"

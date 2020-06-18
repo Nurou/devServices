@@ -13,13 +13,7 @@
     <tr>
       <td>{{developer.name}}</td>
       <td>{{developer.hourly_cost}}</td>
-      {% if developer.experience_level == 1 %}
-      <td>Junior</td>
-      {% elif developer.experience_level == 2 %}
-      <td>Mid</td>
-      {% else %}
-      <td>Senior</td>
-      {% endif%}
+      <td>{{developer.experience()}}</td>
       <td>
         {% for service in developer.services %}
         <span><strong>[{{service.name}}] </strong></span> {% endfor %}
